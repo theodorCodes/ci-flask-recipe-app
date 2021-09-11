@@ -63,15 +63,41 @@ def diets():
     return render_template("diets.html")
 
 
+# ------------------------------------------------------------------------------
 # User profile view - my_recipe
-@app.route("/my_recipes")
-def my_recipes():
-    return render_template("my_recipes.html")
+# passing through username as route
+@app.route("/my_recipes/<username>", methods=["GET", "POST"])
+# and passing username here as argument
+def my_recipes(username):
+    # in variable 'username', store queried user information from username
+    # that is stored in session cookie
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+    # if session cookie truthy,
+    # then render my_recipes.html with the username information
+    if session["user"]:
+        return render_template("my_recipes.html", username=username)
+    # if not truthy, redirect visitor to login page
+    return redirect(url_for("login"))
+    # from here, we can store the username cookie as menu link in base.html
+    # to ensure that only identified users can load their profile
+
+
+# ------------------------------------------------------------------------------
+# User logout
+@app.route("/logout")
+def logout():
+    # logout message
+    flash("You have been logged out")
+    # remove 'user' session cookie
+    session.pop("user")
+    # return to login page
+    return redirect(url_for("login"))
 
 
 # ------------------------------------------------------------------------------
 # User login page
-@app.route("/login", methods=["GET", "POST"])
+@ app.route("/login", methods=["GET", "POST"])
 def login():
     # validate if method is 'POST'
     if request.method == "POST":
@@ -82,13 +108,16 @@ def login():
         # if username from form is equal to users found on mongodb
         if existing_user:
             # check salted password using werkzeug, comparing both passwords
+            # the hashed password from stored in db and the password from input
             if check_password_hash(
                     existing_user["password"], request.form.get("password")):
                 # create session cookie for username
                 session["user"] = request.form.get("username").lower()
-                # send message to user
+                # send message with user stored username from input
                 flash("Hi {}, Welcome back to Daily Delights".format(
                     request.form.get("username")))
+                # redirect user to my_recipes page
+                return redirect(url_for("my_recipes", username=session["user"]))
             # if the password is invalid
             else:
                 # send this message to visitor
@@ -107,7 +136,7 @@ def login():
 
 # ------------------------------------------------------------------------------
 # Registration of new user
-@app.route("/register", methods=["GET", "POST"])
+@ app.route("/register", methods=["GET", "POST"])
 def register():
     # validate if method in register.html is 'POST"
     if request.method == "POST":
@@ -135,8 +164,8 @@ def register():
         session["user"] = request.form.get("username").lower()
         # give success feedback to user
         flash("Registration Successful!")
-        # redirect user to profile page
-        return redirect(url_for("profile", username=session["user"]))
+        # redirect user to my_recipes page
+        return redirect(url_for("my_recipes", username=session["user"]))
 
     # by default - render register.html template
     return render_template("register.html")

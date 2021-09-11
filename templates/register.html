@@ -4,49 +4,49 @@
 {% block content %}
 <!-- Page content title -->
 <h3 class="center-align">Register</h3>
-<!-- Registration form -->
-<div class="row">
-  <!-- Adding the "POST" method and the action="" attribute here -->
-  <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
-    <div class="card-panel">
-      <!-- username -->
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">person_add</i>
-          <!-- Flask lookup 'username' in name attribute -->
-          <!-- includes defensive pattern -->
-          <input id="username" name="username" type="text" minlength="4" maxlength="15" 
-            pattern="^[a-zA-Z0-9]{4,15}$" class="validate" required>
-          <label for="username">Username</label>
+  <!-- Registration form -->
+  <div class="row">
+    <!-- Adding the "POST" method and the action="" attribute here -->
+    <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
+      <div class="card-panel">
+        <!-- username -->
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">person_add</i>
+            <!-- Flask lookup 'username' in name attribute -->
+            <!-- includes defensive pattern -->
+            <input id="username" name="username" type="text" minlength="4" maxlength="15" 
+              pattern="^[a-zA-Z0-9]{4,15}$" class="validate" required>
+            <label for="username">Username</label>
+          </div>
+        </div>
+        <!-- password -->
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">https</i>
+            <!-- Flask lookup 'password' in name attribute -->
+            <!-- includes defensive pattern -->
+            <input id="password" name="password" type="password" minlength="5" maxlength="15"
+              pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required>
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <!-- register -->
+        <div class="row">
+          <button type="submit" class="col s12 btn-large">
+            Register
+          </button>
         </div>
       </div>
-      <!-- password -->
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">https</i>
-          <!-- Flask lookup 'password' in name attribute -->
-          <!-- includes defensive pattern -->
-          <input id="password" name="password" type="password" minlength="5" maxlength="15"
-            pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required>
-          <label for="password">Password</label>
-        </div>
+    </form>
+  </div>
+  <!-- Link to login.html -->
+  <div class="row">
+      <div class="col s12">
+          <p class="center-align">
+              Already Registered?
+              <a href="{{ url_for('login') }}" class="blue-text text-darken-2">Log In</a>
+          </p>
       </div>
-      <!-- register -->
-      <div class="row">
-        <button type="submit" class="col s12 btn-large">
-          Register
-        </button>
-      </div>
-    </div>
-  </form>
-</div>
-<!-- Link to login.html -->
-<div class="row">
-    <div class="col s12">
-        <p class="center-align">
-            Already Registered?
-            <a href="{{ url_for('login') }}" class="blue-text text-darken-2">Log In</a>
-        </p>
-    </div>
-</div>
+  </div>
 {% endblock %}

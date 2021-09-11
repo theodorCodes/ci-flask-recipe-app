@@ -30,7 +30,7 @@
         <ul id="dropdown1" class="dropdown-content">
           <li><a href="#">My Account</a></li>
           <li class="divider"></li>
-          <li><a href="#">Log out</a></li>
+          <li><a href="{{ url_for('logout') }}">Log Out</a></li>
         </ul>
         <!-- Menu center -->
         <ul class="custom-menu-center hide-on-med-and-down">
@@ -42,7 +42,8 @@
         </ul>
         <!-- Menu right -->
         <ul class="right hide-on-med-and-down">
-          <li><a href="{{ url_for('my_recipes') }}">My Recipes</a></li>
+          <!-- URL link that is equal to username stored in session cookie -->
+          <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
           <li><a href="{{ url_for('login') }}">Log In</a></li>
           <li><a href="{{ url_for('register') }}">Register</a></li>
           <li><a class="dropdown-trigger" href="#" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
@@ -57,7 +58,8 @@
       <li><a href="{{ url_for('cuisines') }}">Cuisines</a></li>
       <li><a href="{{ url_for('ingredients') }}">Ingredients</a></li>
       <li><a href="{{ url_for('diets') }}">Diets</a></li>
-      <li><a href="{{ url_for('my_recipes') }}">My Recipes</a></li>
+      <!-- URL link that is equal to username stored in session cookie -->
+      <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
       <li><a href="{{ url_for('login') }}">Log In</a></li>
       <li><a href="{{ url_for('register') }}">Register</a></li>
     </ul>
