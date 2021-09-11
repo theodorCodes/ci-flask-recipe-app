@@ -25,8 +25,10 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
+# ------------------------------------------------------------------------------
 # Base url
 @app.route("/")
+# ------------------------------------------------------------------------------
 # Recipes homepage - get recipes by various categories
 @app.route("/recipes")
 def recipes():
@@ -67,38 +69,68 @@ def my_recipes():
     return render_template("my_recipes.html")
 
 
+# ------------------------------------------------------------------------------
 # User login page
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    # validate if method is 'POST'
+    if request.method == "POST":
+        # get username from mongodb and store in 'existing_user'
+        # and validate with 'username' in lowercase from form
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+        # if username from form is equal to users found on mongodb
+        if existing_user:
+            # check salted password using werkzeug, comparing both passwords
+            if check_password_hash(
+                    existing_user["password"], request.form.get("password")):
+                # create session cookie for username
+                session["user"] = request.form.get("username").lower()
+                # send message to user
+                flash("Hi {}, Welcome back to Daily Delights".format(
+                    request.form.get("username")))
+            # if the password is invalid
+            else:
+                # send this message to visitor
+                flash("Your Username and/or Password does not match")
+                # and redirect visitor back to the login page
+                return redirect(url_for("login"))
+        # if the user does not exist
+        else:
+            # send the same message to visitor
+            flash("Your Username and/or Password does not match")
+            # and redirect visitor back to the login page
+            return redirect(url_for("login"))
+
     return render_template("login.html")
 
 
+# ------------------------------------------------------------------------------
 # Registration of new user
 @app.route("/register", methods=["GET", "POST"])
 def register():
     # validate if method in register.html is 'POST"
     if request.method == "POST":
-        # get username from mongodb in lowercase
+        # get username from mongodb
+        # and validate with username in lowercase from form
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
-
         # if user exist
         if existing_user:
             # show flash message
             flash("Username already exists")
             # and redirect visitor to the register page
             return redirect(url_for("register"))
-
         # create variable 'register'
         register = {
             # and store 'username and password from form
             "username": request.form.get("username").lower(),
-            # using werkzeug to generate password salt and randomize stored password
+            # using werkzeug to generate password salt
+            # and randomize stored password
             "password": generate_password_hash(request.form.get("password"))
         }
         # insert variable 'register' in 'users' collection on mongodb
         mongo.db.users.insert_one(register)
-
         # put the new user into 'session' cookie named 'user' on the browser
         session["user"] = request.form.get("username").lower()
         # give success feedback to user
@@ -110,6 +142,7 @@ def register():
     return render_template("register.html")
 
 
+# ------------------------------------------------------------------------------
 # Run Flask application
 # Get IP and PORT number and run Flask application in debug mode
 if __name__ == "__main__":

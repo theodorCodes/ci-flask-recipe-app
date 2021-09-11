@@ -4,7 +4,7 @@
 {% block content %}
 <!-- Page content title -->
 <h3 class="center-align">Register</h3>
-<!-- Page content -->
+<!-- Registration form -->
 <div class="row">
   <!-- Adding the "POST" method and the action="" attribute here -->
   <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
@@ -20,7 +20,7 @@
           <label for="username">Username</label>
         </div>
       </div>
-      <!-- passowrd -->
+      <!-- password -->
       <div class="row">
         <div class="input-field col s12">
           <i class="material-icons prefix">https</i>
@@ -39,5 +39,14 @@
       </div>
     </div>
   </form>
+</div>
+<!-- Link to login.html -->
+<div class="row">
+    <div class="col s12">
+        <p class="center-align">
+            Already Registered?
+            <a href="{{ url_for('login') }}" class="blue-text text-darken-2">Log In</a>
+        </p>
+    </div>
 </div>
 {% endblock %}
