@@ -64,7 +64,7 @@ def diets():
 
 
 # ------------------------------------------------------------------------------
-# User profile view - my_recipe
+# User - recipe page
 # passing through username as route
 @app.route("/my_recipes/<username>", methods=["GET", "POST"])
 # and passing username here as argument
@@ -81,6 +81,15 @@ def my_recipes(username):
     return redirect(url_for("login"))
     # from here, we can store the username cookie as menu link in base.html
     # to ensure that only identified users can load their profile
+
+
+# ------------------------------------------------------------------------------
+# User - profile page
+# passing through username as route
+@app.route("/profile")
+# and passing username as argument
+def profile():
+    return render_template("profile.html")
 
 
 # ------------------------------------------------------------------------------

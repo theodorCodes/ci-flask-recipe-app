@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Font awesome library -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" type="text/css" />
   <!-- Google material icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -26,12 +24,6 @@
       <div class="nav-wrapper">
         <a href="{{ url_for('recipes') }}" class="brand-logo">Daily Delights</a>
         <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
-        <!-- Dropdown menu -->
-        <ul id="dropdown1" class="dropdown-content">
-          <li><a href="#">My Account</a></li>
-          <li class="divider"></li>
-          <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-        </ul>
         <!-- Menu center -->
         <ul class="custom-menu-center hide-on-med-and-down">
           <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
@@ -41,12 +33,24 @@
           <li><a href="{{ url_for('diets') }}">Diets</a></li>
         </ul>
         <!-- Menu right -->
+        <!-- Session based menu -->
+        {% if session.user %}
+          <!-- Dropdown menu -->
+          <ul id="dropdown1" class="dropdown-content">
+            <li><a href="{{ url_for('profile') }}">My Account</a></li>
+            <li class="divider"></li>
+            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+          </ul>
+        {% endif %}
         <ul class="right hide-on-med-and-down">
-          <!-- URL link that is equal to username stored in session cookie -->
-          <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
-          <li><a href="{{ url_for('login') }}">Log In</a></li>
-          <li><a href="{{ url_for('register') }}">Register</a></li>
-          <li><a class="dropdown-trigger" href="#" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+          {% if session.user %}
+            <!-- URL link that is equal to username stored in session cookie -->
+            <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
+            <li><a class="dropdown-trigger" href="#" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>
@@ -58,10 +62,16 @@
       <li><a href="{{ url_for('cuisines') }}">Cuisines</a></li>
       <li><a href="{{ url_for('ingredients') }}">Ingredients</a></li>
       <li><a href="{{ url_for('diets') }}">Diets</a></li>
-      <!-- URL link that is equal to username stored in session cookie -->
-      <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
-      <li><a href="{{ url_for('login') }}">Log In</a></li>
-      <li><a href="{{ url_for('register') }}">Register</a></li>
+      <li class="divider"></li>
+      {% if session.user %}
+        <!-- URL link that is equal to username stored in session cookie -->
+        <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
+        <li><a href="{{ url_for('profile') }}">My Account</a></li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}">Log In</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+      {% endif %}
     </ul>
   </header>
   <!-- Flash message section -->
