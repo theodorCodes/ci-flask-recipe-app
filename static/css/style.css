@@ -3,3 +3,17 @@ nav .brand-logo {
   font-size: 1.8rem;
   margin-left: 12px;
 }
+
+/* Custom centered menu */
+.custom-menu-center {
+  float: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Dropdown menu */
+.dropdown-content {
+  top: 64px !important;
+}

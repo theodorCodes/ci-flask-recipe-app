@@ -27,7 +27,7 @@ mongo = PyMongo(app)
 
 # Base url
 @app.route("/")
-# Homepage
+# Recipes homepage - get recipes by various categories
 @app.route("/recipes")
 def recipes():
     # Save queried data in variable 'recipes'
@@ -37,74 +37,80 @@ def recipes():
     return render_template("recipes.html", recipes=recipes)
 
 
-# Meals page
+# Meals page - get recipes ordered by meals
 @app.route("/meals")
 def meals():
     return render_template("meals.html")
 
 
-# Cuisine page
+# Cuisine page - get recipes ordered by cuisines
 @app.route("/cuisines")
 def cuisines():
     return render_template("cuisines.html")
 
 
-# Cuisine page
+# Ingredient page - get recipes ordered by ingredients
 @app.route("/ingredients")
 def ingredients():
     return render_template("ingredients.html")
 
 
-# Cuisine page
+# Diets page - get recipes ordered by diets
 @app.route("/diets")
 def diets():
     return render_template("diets.html")
 
 
-# Login page
-@app.route("/login")
-def login():
-    return render_template("login.html")
-
-
-# User - register
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        # check if username already exists in db
-        existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
-
-        # redirect visitor to the register page
-        if existing_user:
-            flash("Username already exists")
-            return redirect(url_for("register"))
-
-        # store username and password from form of register.html
-        # in variable register
-        register = {
-            "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get("password"))
-        }
-        # insert variable 'register' in 'users' collection
-        mongo.db.users.insert_one(register)
-
-        # put the new user into 'session' cookie
-        session["user"] = request.form.get("username").lower()
-        flash("Registration Successful!")
-        # ADDING REDIRECT TO OUR NEW USER PROFILE PAGE HERE
-        return redirect(url_for("profile", username=session["user"]))
-
-    # render register.html template
-    return render_template("register.html")
-
-
-# User - profile /my_recipe view
+# User profile view - my_recipe
 @app.route("/my_recipes")
 def my_recipes():
     return render_template("my_recipes.html")
 
 
+# User login page
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+
+# Registration of new user
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    # validate if method in register.html is 'POST"
+    if request.method == "POST":
+        # get username from mongodb in lowercase
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        # if user exist
+        if existing_user:
+            # show flash message
+            flash("Username already exists")
+            # and redirect visitor to the register page
+            return redirect(url_for("register"))
+
+        # create variable 'register'
+        register = {
+            # and store 'username and password from form
+            "username": request.form.get("username").lower(),
+            # using werkzeug to generate password salt and randomize stored password
+            "password": generate_password_hash(request.form.get("password"))
+        }
+        # insert variable 'register' in 'users' collection on mongodb
+        mongo.db.users.insert_one(register)
+
+        # put the new user into 'session' cookie named 'user' on the browser
+        session["user"] = request.form.get("username").lower()
+        # give success feedback to user
+        flash("Registration Successful!")
+        # redirect user to profile page
+        return redirect(url_for("profile", username=session["user"]))
+
+    # by default - render register.html template
+    return render_template("register.html")
+
+
+# Run Flask application
 # Get IP and PORT number and run Flask application in debug mode
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),

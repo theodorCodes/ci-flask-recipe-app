@@ -1,4 +1,8 @@
-// Materialize/jQuery - Collapsible mobile menu
+
 $(document).ready(function () {
+    // Materialize/jQuery - Collapsible mobile menu
     $(".sidenav").sidenav({edge: "right"});
+    // Desktop menu - dropdown
+    $(".dropdown-trigger").dropdown({hover: false});
 });
+
