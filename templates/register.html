@@ -20,6 +20,17 @@
             <label for="username">Username</label>
           </div>
         </div>
+        <!-- email -->
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <!-- Flask lookup 'email' in name attribute -->
+            <!-- includes defensive pattern for email from http://emailregex.com -->
+            <input id="email" name="email" type="email" minlength="5" maxlength="30"
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" class="validate" required>
+            <label for="email">Email</label>
+          </div>
+        </div>
         <!-- password -->
         <div class="row">
           <div class="input-field col s12">

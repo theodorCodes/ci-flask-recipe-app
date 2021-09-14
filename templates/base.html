@@ -23,7 +23,7 @@
     <nav>
       <div class="nav-wrapper">
         <a href="{{ url_for('recipes') }}" class="brand-logo">Daily Delights</a>
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         <!-- Menu center -->
         <ul class="custom-menu-center hide-on-med-and-down">
           <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
@@ -37,7 +37,7 @@
         {% if session.user %}
           <!-- Dropdown menu -->
           <ul id="dropdown1" class="dropdown-content">
-            <li><a href="{{ url_for('profile') }}">My Account</a></li>
+            <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
             <li class="divider"></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
@@ -45,7 +45,7 @@
         <ul class="right hide-on-med-and-down">
           {% if session.user %}
             <!-- URL link that is equal to username stored in session cookie -->
-            <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
+            <li><a href="{{ url_for('my_recipes', account=session["user"]) }}">My Recipes</a></li>
             <li><a class="dropdown-trigger" href="#" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
           {% else %}
             <li><a href="{{ url_for('login') }}">Log In</a></li>
@@ -65,8 +65,9 @@
       <li class="divider"></li>
       {% if session.user %}
         <!-- URL link that is equal to username stored in session cookie -->
-        <li><a href="{{ url_for('my_recipes', username=session["user"]) }}">My Recipes</a></li>
-        <li><a href="{{ url_for('profile') }}">My Account</a></li>
+        <li><a href="{{ url_for('my_recipes', account=session["user"]) }}">My Recipes</a></li>
+        <!-- URL link that is equal to username stored in session cookie -->
+        <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
       {% else %}
         <li><a href="{{ url_for('login') }}">Log In</a></li>

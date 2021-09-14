@@ -9,15 +9,16 @@
     <!-- Adding the "POST" method and the action="" attribute here -->
     <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('login') }}">
       <div class="card-panel">
-        <!-- username -->
+
+        <!-- email -->
         <div class="row">
           <div class="input-field col s12">
-            <i class="material-icons prefix">person</i>
-            <!-- Flask lookup 'username' in name attribute -->
-            <!-- includes defensive pattern -->
-            <input id="username" name="username" type="text" minlength="4" maxlength="15" 
-              pattern="^[a-zA-Z0-9]{4,15}$" class="validate" required>
-            <label for="username">Username</label>
+            <i class="material-icons prefix">email</i>
+            <!-- Flask lookup 'email' in name attribute -->
+            <!-- includes defensive pattern for email from http://emailregex.com -->
+            <input id="email" name="email" type="email" minlength="5" maxlength="30"
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" class="validate" required>
+            <label for="email">Email</label>
           </div>
         </div>
         <!-- password -->

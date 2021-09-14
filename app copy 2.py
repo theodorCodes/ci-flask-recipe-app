@@ -77,40 +77,41 @@ def diets():
 def register():
     # validate if method in register.html is 'POST"
     if request.method == "POST":
-        # get email from mongodb and validate with email from form input
+        # get email from mongodb
+        # and validate with email from form input
         existing_user = mongo.db.users.find_one(
             {"email": request.form.get("email").lower()})
-        # if user already exists show flash message
+        # if user already exists
         if existing_user:
-            flash("Email already exists.")
-            flash("Login with current email or try another one.")
-            flash("(Password recovery service not available yet)")
-            # redirect visitor to the register page
+            # show flash message
+            flash("Email already exists")
+            # and redirect visitor to the register page
             return redirect(url_for("register"))
-        # if user does not exists, create variable 'register' with input values
+        # if user does not exists, create variable 'register'
         register = {
-            # store username, email in lowercase
+            # and store username from input in lowercase,
             "username": request.form.get("username").lower(),
+            # user email
             "email": request.form.get("email").lower(),
-            # and password from form, using werkzeug to generate password salt
+            # and password from form using werkzeug to generate password salt
             "password": generate_password_hash(request.form.get("password"))
         }
         # insert variable 'register' in 'users' collection on mongodb
-        # AND store created user-info in '_id' variable
+        # AND store created user info in '_id' variable
         _id = mongo.db.users.insert_one(register)
-        # create session cookie with inserted_id, created during insert_one()
+        # create session cookie with inserted_id
         # and convert the bson object into a string value
         session["user"] = str(_id.inserted_id)
-        # query and store user data
+        print(session["user"])
+        # get user name for greeting message
         user = mongo.db.users.find_one(
             {"_id": ObjectId(session["user"])}, {"password": 0})
         # give success feedback to user
         flash("Registration Successful!")
-        # redirect user to my_recipes page and passing through username
-        # from queried user data to use in my_recipe.html
-        return redirect(url_for("my_recipes", account=user['username']))
+        # redirect user to my_recipes page and passing through username to my_recipe.html
+        return redirect(url_for("my_recipes", username=user['username']))
 
-    # default - render register.html template for visitors
+    # by default - render register.html template
     return render_template("register.html")
 
 
@@ -130,13 +131,21 @@ def login():
             # the hashed password stored on db and the password from input
             if check_password_hash(
                     existing_user["password"], request.form.get("password")):
-                # create session cookie for user with user id as string
-                session["user"] = str(existing_user["_id"])
+                # create session cookie for user with username
+                session["user"] = existing_user["username"].lower()
+
+                # TEST 1 (works) create session cookie  with id
+                # user_id = existing_user["_id"]
+                # print(user_id)
+
+                # TEST 2 ()
+                # session["profile"] = str(existing_user["_id"])
+
                 # send message with user stored username
                 flash("Hi {}, Welcome back to Daily Delights".format(
                     existing_user["username"].lower()))
-                # and redirect user to my_recipes page
-                return redirect(url_for("my_recipes", account=session["user"]))
+                return redirect(url_for("my_recipes", username=session["user"]))
+                # redirect user to my_recipes page
             # if the password is invalid
             else:
                 # send this message to visitor
@@ -150,112 +159,76 @@ def login():
             # and redirect visitor back to the login page
             return redirect(url_for("login"))
 
-    # default - render login.html template for visitors
     return render_template("login.html")
 
 
 # ------------------------------------------------------------------------------
-# User my_recipes, profile page
-# with user id in route, preventing visitors without cookie to see this page
-@ app.route("/my_recipes/<account>", methods=["GET", "POST"])
-# and passing user id here as argument
-def my_recipes(account):
-    # in variable 'account', compare ObjectId from db with user id
-    # stored in session cookie during registration or login
-    account = mongo.db.users.find_one(
-        {"_id": ObjectId(session["user"])}, {"password": 0})
+# User profile, my_recipes page
+# with username as route, preventing visitors without cookie to see this page
+@ app.route("/my_recipes/<username>", methods=["GET", "POST"])
+# and passing username here as argument
+def my_recipes(username):
+    # in variable 'username', compare username from db with username
+    # that is stored in session cookie during login by looking up 'username' only
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
     # if session cookie truthy,
-    # then render my_recipes.html with the user information
+    # then render my_recipes.html with the username information
     if session["user"]:
-        return render_template("my_recipes.html", account=account)
+        return render_template("my_recipes.html", username=username)
     # if not truthy, redirect visitor to login page
     return redirect(url_for("login"))
-    # account cookie is set required in menu link at base.html file
-    # ensuring that only identified users can load their profile
+    # from here, we can store the username cookie as menu link in base.html
+    # to ensure that only identified users can load their profile
 
 
 # ------------------------------------------------------------------------------
 # User account page
-# with user id in route, preventing visitors without cookie to see this page
+# with username as route, preventing visitors without cookie to see this page
 @ app.route("/user/<account>", methods=["GET", "POST"])
 # and passing username as argument
 def user(account):
-    # get user data where object id is equal to session cookie stored during
-    # log in but exclude password
-    account = mongo.db.users.find_one(
-        {"_id": ObjectId(session["user"])}, {"password": 0})
+    # get user profile where user is equal to session user stored during log in
+    # but exclude password
+    account = mongo.db.users.find_one({"username": session["user"]})
+    # {"username": session["user"]}, {"password": 0})
+    # test what's stored
+    # print(username)
+    # print(session["user"])
+    # print(session["profile"])
     # if session cookie truthy,
-    # then render user.html with username information
+    # then render profile.html with the username information
     if session["user"]:
         return render_template("user.html", account=account)
     # if not truthy, redirect visitor to login page
     return redirect(url_for("login"))
-    # account cookie is set required in menu link at base.html file
+    # from here, we can store the username cookie as menu link in base.html
     # to ensure that only identified users can load their profile
 
 
 # ------------------------------------------------------------------------------
 # User edit account page
-# with user id in route, preventing visitors without cookie to see this page
+# with username as route, preventing visitors without cookie to see this page
 @ app.route("/edit_user/<user_id>", methods=["GET", "POST"])
-# and passing user id as argument
+# and passing username as argument
 def edit_user(user_id):
-    # submit button actions
-    # validate if method is 'POST'
+    # POST
     if request.method == "POST":
-        # store email request
-        email_requested = request.form.get("email").lower()
-        # test: print(email_requested)
-        # check resquest email in mongodb for existing accounts
-        # tested: if no account found with this email the result is 'None'
-        existing_email = mongo.db.users.find_one(
-            {"email": request.form.get("email").lower()})
-        # test: print(existing_email)
-        # store current user email
-        current_user_email = mongo.db.users.find_one(
-            {"_id": ObjectId(session["user"])})["email"]
-        # test: print(current_user_email)
-        # store passwords from user input
-        password = request.form.get("password")
-        password2 = request.form.get("password2")
-        # if email_requested is not equal to current_user_email and no
-        # existing user with this email found or email request and current email is the same
-        if email_requested != current_user_email and existing_email == None or email_requested == current_user_email:
-            # test: print("email ok to use")
-            # check if password not empty and if both password match
-            if password != "" and password != password2:
-                flash("Passwords do not match")
-            # check if password not empty and if both password match
-            elif password != "" and password == password2:
-                submit = {"$set": {
-                    "username": request.form.get("username").lower(),
-                    "email": request.form.get("email").lower(),
-                    "password": generate_password_hash(request.form.get("password"))
-                }}
-                # test: print("full update prepared")
-                # update in mongodb where user id matches the user id
-                mongo.db.users.update_one({"_id": ObjectId(user_id)}, submit)
-                # give success feedback to user
-                flash("Update Successful. Log in with your new credentials!")
-                # get update user data from mongodb
-                account = mongo.db.users.find_one(
-                    {"_id": ObjectId(session["user"])}, {"password": 0})
-                return render_template("user.html", account=account)
-            else:
-                submit = {"$set": {
-                    "username": request.form.get("username").lower(),
-                    "email": request.form.get("email").lower(),
-                }}
-                # test: print("partial update prepared")
-                mongo.db.users.update_one({"_id": ObjectId(user_id)}, submit)
-                flash("Update Successful")
-                account = mongo.db.users.find_one(
-                    {"_id": ObjectId(session["user"])}, {"password": 0})
-                return render_template("user.html", account=account)
+        # using $set to update and not deleted values that are empty
+        submit = {"$set": {
+            "username": request.form.get("username").lower(),
+            "email": request.form.get("email").lower()
+        }}
+        mongo.db.users.update_one({"_id": ObjectId(user_id)}, submit)
+        flash("User Information Successfully Updated, Log In To Use New Info")
+        account = mongo.db.users.find_one({"username": session["user"]})
+        return render_template("user.html", account=account)
 
-    # get user data where user is equal to session user stored during log in
-    user = mongo.db.users.find_one(
-        {"_id": ObjectId(session["user"])}, {"password": 0})
+    # GET
+    # get user profile where user is equal to session user stored during log in
+    user = mongo.db.users.find_one({"username": session["user"]})
+    # get user objectid from stored 'user'
+    # user_id = user['_id']
     # if 'user' session cookie truthy, render edit_user.html with account info
     if session["user"]:
         return render_template("edit_user.html", user=user)

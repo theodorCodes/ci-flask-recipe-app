@@ -1,0 +1,71 @@
+<!-- Jinja - extending base.html -->
+{% extends "base.html" %}
+<!-- Jinja - inject content into base.html -->
+{% block content %}
+  <!-- Page content title -->
+  <!-- cancel button -->
+  <div class="row">
+    <!-- Using class custom-button-right for additional styling in style.css -->
+    <div class="col s12 custom-button-right">
+      <!-- Cancel - Materialize button small, link back to user.html where session cookie is required -->
+      <a href="{{ url_for('user', account=session["user"]) }}" class="waves-effect waves-light btn-small">Cancel</a>
+    </div>
+  </div>
+  <!-- Card - Materialize card -->
+  <div class="row card-panel grey lighten-5">
+    <!-- Form - shows current values, prepares to be updated when click on save 
+    with POST method and route info of edit_user as well as ObjectId -->
+    <form class="col s12" method="POST" action="{{ url_for('edit_user', user_id=user._id) }}">
+      <!-- username -->
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="prefix material-icons">person</i>
+          <!-- name attribute 'username' for flask, includes defensive pattern,
+          the value is set as username.username which we get from the find_one() method 
+          when loading this page, see app.py -->
+          <input id="username" name="username" value="{{ user.username }}" type="text" minlength="4" maxlength="15" pattern="^[a-zA-Z0-9]{4,15}$" class="validate" required>
+          <label for="username">Username</label>
+        </div>
+      </div>
+      <!-- email -->
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="prefix material-icons">email</i>
+          <!-- name attribute 'email' for flask, includes defensive pattern,
+          shows current email value username.email -->
+          <input id="email" name="email" type="email" value="{{ user.email }}" minlength="5" maxlength="30" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" class="validate" required>
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <!-- password1 -->
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="prefix material-icons">lock</i>
+          <!-- Flask lookup 'password' in name attribute -->
+          <!-- includes defensive pattern -->
+          <input id="password" name="password" type="password" placeholder="Password" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate">
+          <label for="password">New Password</label>
+        </div>
+      </div>
+      <!-- password2 -->
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="prefix material-icons">lock_outline</i>
+          <!-- Flask lookup 'password' in name attribute -->
+          <!-- includes defensive pattern -->
+          <input id="password2" name="password2" type="password" placeholder="Password" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate">
+          <label for="passwords">Repeat Password</label>
+        </div>
+      </div>
+      <!-- sumbmit button -->
+      <div class="row">
+        <!-- Using class custom-button-right for additional styling in style.css -->
+        <div class="col s12 custom-button-right">
+          <!-- Submit/upate - Materialize button small -->
+          <button type="submit" class="waves-effect waves-light btn-small">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<!-- end Jinja injection block-->
+{% endblock %}

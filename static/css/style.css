@@ -17,3 +17,9 @@ nav .brand-logo {
 .dropdown-content {
   top: 64px !important;
 }
+
+/* Account edit button */
+.custom-button-right {
+  text-align: right;
+  margin-top: 30px;
+}
