@@ -175,9 +175,55 @@ def my_recipes(account):
 
 
 # ------------------------------------------------------------------------------
+# User profile page
+@ app.route("/profile/<account>")
+def profile(account):
+    # get profile data
+    profile = mongo.db.profiles.find_one(
+        {"user_id": session["user"]})
+    # if 'user' session cookie truthy, render profile.html with profile info
+    if session["user"]:
+        return render_template("profile.html", profile=profile)
+    # if not truthy, redirect visitor to login page
+    return redirect(url_for("login"))
+
+
+# ------------------------------------------------------------------------------
+# User profile page
+@ app.route("/profile_edit/<account>", methods=["GET", "POST"])
+def profile_edit(account):
+    # submit button actions
+    # validate if method is 'POST'
+    if request.method == "POST":
+        submit = {"$set": {
+            "website": request.form.get("website"),
+            "bio": request.form.get("bio")
+        }}
+        mongo.db.profiles.update({"user_id": session["user"]}, submit)
+        flash("Profile Successfully Updated")
+        profile = mongo.db.profiles.find_one(
+            {"user_id": session["user"]})
+        return render_template("profile.html", profile=profile)
+    # get user data where object id is equal to session cookie stored during
+    # log in but exclude password
+    account = mongo.db.users.find_one(
+        {"_id": ObjectId(session["user"])}, {"password": 0})
+    # get profile data where user_id is equal to session user stored during log in
+    # test: print(session["user"])
+    profile = mongo.db.profiles.find_one(
+        {"user_id": session["user"]})
+    # test: print(profile)
+    # if 'user' session cookie truthy, render edit_user.html with account info
+    if session["user"]:
+        return render_template("profile_edit.html", account=account, profile=profile)
+    # if not truthy, redirect visitor to login page
+    return redirect(url_for("login"))
+
+
+# ------------------------------------------------------------------------------
 # User account page
 # with user id in route, preventing visitors without cookie to see this page
-@ app.route("/user/<account>", methods=["GET", "POST"])
+@ app.route("/user/<account>")
 # and passing username as argument
 def user(account):
     # get user data where object id is equal to session cookie stored during
@@ -195,11 +241,11 @@ def user(account):
 
 
 # ------------------------------------------------------------------------------
-# User edit account page
+# User account edit page
 # with user id in route, preventing visitors without cookie to see this page
-@ app.route("/edit_user/<user_id>", methods=["GET", "POST"])
+@ app.route("/user_edit/<user_id>", methods=["GET", "POST"])
 # and passing user id as argument
-def edit_user(user_id):
+def user_edit(user_id):
     # submit button actions
     # validate if method is 'POST'
     if request.method == "POST":
@@ -258,7 +304,7 @@ def edit_user(user_id):
         {"_id": ObjectId(session["user"])}, {"password": 0})
     # if 'user' session cookie truthy, render edit_user.html with account info
     if session["user"]:
-        return render_template("edit_user.html", user=user)
+        return render_template("user_edit.html", user=user)
     # if not truthy, redirect visitor to login page
     return redirect(url_for("login"))
 

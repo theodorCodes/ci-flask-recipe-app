@@ -3,11 +3,12 @@
 <!-- Jinja - inject content into base.html -->
 {% block content %}
   <!-- Page content title -->
+  <h3 class="center-align">My Profile</h3>
   <!-- button -->
   <div class="row">
     <div class="col s12 custom-button-right">
       <!-- Materialize button small, link to edit_user.html where session cookie is required -->
-      <a href="{{ url_for('user_edit', user_id=session["user"]) }}" class="waves-effect waves-light btn-small">Edit</a>
+      <a href="{{ url_for('profile_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small">Edit</a>
     </div>
   </div>
   <!-- Materialize card -->
@@ -17,18 +18,19 @@
       <li>
         <div class="collapsible-header">
           <i class="material-icons">person</i>
-          {{ account.username }}
+          {{ profile.username }}
       </li>
       <li>
         <div class="collapsible-header">
-          <i class="material-icons">email</i>
-          {{ account.email }}
+          <i class="material-icons">public</i>
+          {{ profile.website }}
       </li>
       <li>
         <div class="collapsible-header">
-          <i class="material-icons">lock</i>
-          ******
+          <i class="material-icons">format_align_left</i>
+          {{ profile.bio }}
       </li>
     </ul>
   </div>
+
 {% endblock %}
