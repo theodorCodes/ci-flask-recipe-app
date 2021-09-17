@@ -2,13 +2,14 @@
 {% extends "base.html" %}
 <!-- Jinja - inject content into base.html -->
 {% block content %}
-  <!-- Page content title -->
+  <!-- Page title -->
+  <h3 class="center-align">Account</h3>
   <!-- cancel button -->
   <div class="row">
     <!-- Using class custom-button-right for additional styling in style.css -->
     <div class="col s12 custom-button-right">
       <!-- Cancel - Materialize button small, link back to user.html where session cookie is required -->
-      <a href="{{ url_for('user', account=session["user"]) }}" class="waves-effect waves-light btn-small">Cancel</a>
+      <a href="{{ url_for('user', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Cancel</a>
     </div>
   </div>
   <!-- Card - Materialize card -->
@@ -62,7 +63,7 @@
         <!-- Using class custom-button-right for additional styling in style.css -->
         <div class="col s12 custom-button-right">
           <!-- Submit/upate - Materialize button small -->
-          <button type="submit" class="waves-effect waves-light btn-small">Save</button>
+          <button type="submit" class="waves-effect waves-light btn-small #9e9e9e grey button-style-custom-2">Save</button>
         </div>
       </div>
     </form>

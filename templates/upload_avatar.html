@@ -1,0 +1,48 @@
+<!-- Jinja - extending base.html -->
+{% extends "base.html" %}
+<!-- Jinja - inject content into base.html -->
+{% block content %}
+
+  <h3 class="center-align">Upload Avatar</h3>
+  
+  <!-- cancel button -->
+  <div class="row">
+    <div class="col s12 custom-button-right">
+      <!-- Materialize button small, link to edit_user.html where session cookie is required -->
+      <a href="{{ url_for('profile_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small">Cancel</a>
+    </div>
+  </div>
+
+  <!-- profile avatar -->
+  <div class="card #fafafa grey lighten-5">
+    <div class="card-content black-text">
+      <div class="custom-card-section">
+        <span class="custom-card-span">
+          <!-- add avatar as prefix here later -->
+          <p>avatar</p>
+        </span>
+        <span class="card-title">
+          <!-- add avatar as prefix here later -->
+          {# {{ account.username }} #}
+        </span>
+      </div>
+      <p>
+        <!-- content -->
+      </p><br>
+      <p>
+        <!-- content -->
+      </p>
+    </div>
+    <form method="POST" action="" enctype="multipart/form-data">
+      <p><input type="file" name="file"></p>
+      <p><input type="submit" value="Submit"></p>
+    </form>
+    <!--
+    <div class="card-action">
+      <a href="{{ url_for('profile_edit', account=session["user"]) }}">Edit</a>
+    </div>
+    -->
+  </div>
+
+<!-- end Jinja injection block-->
+{% endblock %}

@@ -1,7 +1,29 @@
+/* Google font usage */
+/*
+font-family: 'Lora', serif; (weights: 400, 500, 600)
+font-family: 'Open Sans', sans-serif; (weights: 700)
+*/
+
+/* General font */
+body {
+  font-family: 'Lora', serif;
+}
+
+
+
 /* Logo */
 nav .brand-logo {
-  font-size: 1.8rem;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 600;
   margin-left: 12px;
+  color: #000000
+}
+
+/* nagivation color */
+nav ul a {
+  font-size: 18px;
+  color: #000000;
 }
 
 /* Custom centered menu */
@@ -13,13 +35,94 @@ nav .brand-logo {
   transform: translate(-50%, -50%);
 }
 
+
+
 /* Dropdown menu */
 .dropdown-content {
   top: 64px !important;
 }
 
+
+
+/* Button style custom */
+.button-style-custom, .button-style-custom-2 {
+  font-family: sans-serif;
+  font-size: 12px;
+  box-shadow: none;
+  border: 1px solid #000;
+  border-radius: 18px;
+}
+
+/* Button style custom without border */
+.button-style-custom-2 {
+  border:  none;
+}
+
+
+
 /* Account edit button */
 .custom-button-right {
   text-align: right;
-  margin-top: 30px;
 }
+
+/* Account icon */
+.account-icon {
+  vertical-align: sub;
+  padding: 16px;
+}
+
+/* Account content */
+.account-title {
+  padding-bottom: 2px !important;
+}
+
+
+
+/* My Recipe - Profile page */
+.avatar-image-size > img {
+  width: 60px;
+}
+
+.profile-content, .profile-link {
+  padding-left: 0px !important;
+}
+
+.profile-name {
+  margin-bottom: 6px;
+}
+
+.profile-link {
+  margin-top: 12px;
+}
+
+.social-stats {
+  padding-right: 22px;
+}
+
+
+
+/* Profile edit page */
+.custom-card-section {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.custom-card-span {
+  margin-right: 15px;
+}
+
+
+
+/* Avatar file upload button */
+.collection .collection-item.avatar {
+  background: #fafafa;
+  padding: 30px 0px 36px 79px;
+}
+
+.collection .collection-item.avatar .title {
+  display: block;
+  padding-top: 9px;
+  padding-bottom: 32px;
+}
+

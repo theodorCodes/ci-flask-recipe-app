@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google font Lora and Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,600&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
   <!-- Google material icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -21,7 +25,7 @@
   <header>
     <!-- Desktop navbar -->
     <nav>
-      <div class="nav-wrapper">
+      <div class="nav-wrapper text-blue #fafafa grey lighten-5">
         <a href="{{ url_for('recipes') }}" class="brand-logo">Daily Delights</a>
         <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         <!-- Menu center -->
@@ -38,7 +42,6 @@
           <!-- Dropdown menu -->
           <ul id="dropdown1" class="dropdown-content">
             <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
-            <li><a href="{{ url_for('profile', account=session["user"]) }}">My Profile</a></li>
             <li class="divider"></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
@@ -69,7 +72,6 @@
         <li><a href="{{ url_for('my_recipes', account=session["user"]) }}">My Recipes</a></li>
         <!-- URL link that is equal to username stored in session cookie -->
         <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
-        <li><a href="{{ url_for('profile', account=session["user"]) }}">My Profile</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
       {% else %}
         <li><a href="{{ url_for('login') }}">Log In</a></li>
