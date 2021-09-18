@@ -1,3 +1,8 @@
+/* 
+----------------------------------------------------------------------- 
+FONTS */
+
+
 /* Google font usage */
 /*
 font-family: 'Lora', serif; (weights: 400, 500, 600)
@@ -9,6 +14,10 @@ body {
   font-family: 'Lora', serif;
 }
 
+
+/* 
+----------------------------------------------------------------------- 
+NAVBAR */
 
 
 /* Logo */
@@ -36,16 +45,28 @@ nav ul a {
 }
 
 
+/* 
+-----------------------------------------------------------------------
+*/
+
 
 /* Dropdown menu */
 .dropdown-content {
-  top: 64px !important;
+  top: 66px !important;
+}
+
+.dropdown-content li > a {
+  color: #000000;
 }
 
 .hamburger-custom {
   color: #000000;
 }
 
+
+/* 
+-----------------------------------------------------------------------
+*/
 
 
 /* Button style custom */
@@ -63,6 +84,9 @@ nav ul a {
 }
 
 
+/* 
+----------------------------------------------------------------------- 
+ACCOUNT VIEW */
 
 /* Account edit button */
 .custom-button-right {
@@ -81,28 +105,300 @@ nav ul a {
 }
 
 
+/* 
+----------------------------------------------------------------------- 
+MY RECIPE VIEW */
 
-/* My Recipe - Profile page */
+
+/* My Recipe - Profile card */
 .avatar-image-size > img {
-  width: 60px;
+  object-fit: cover;
+  width: auto;
+  height: 60px;
+  aspect-ratio: 1/1;
 }
 
+/* Avatar - materialize custom */
+.row .col.s2 {
+  min-width: 76px;
+}
+
+/* Profile card */
 .profile-content, .profile-link {
   padding-left: 0px !important;
 }
 
+/* Profile card content */
 .profile-name {
   margin-bottom: 6px;
 }
 
+/* Profile card content */
 .profile-link {
   margin-top: 12px;
 }
 
+/* Profile card content */
 .social-stats {
   padding-right: 22px;
 }
 
+/* Profile edit - Avatar section */
+.row.card > .collection {
+  border: none;
+}
+
+
+/* 
+-----------------------------------------------------------------------
+*/
+
+
+/* My Recipe - Recipte preview card */
+.custom-recipe-container {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+/* Preview card - square image */
+.card-image-custom a > img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+}
+
+/* Card padding */
+.card-content {
+  padding: 16px 24px 24px !important;
+}
+
+/* Card subtitle */
+.card-subtitle {
+  padding-bottom: 12px;
+  font-family: 'Open Sans', sans-serif;
+  weights: 700;
+  text-transform: uppercase;
+}
+
+/* Card title */
+.card-title-custom {
+  font-size: 18px;
+}
+
+/* Card actions font-size */
+.card-action {
+  font-size: 14px;
+}
+
+/* Preview card - stats */
+.card-stats-time {
+  float: left;
+  display:  inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* timer icon */
+i.tiny {
+  height: 18px;
+  padding-right: 3px;
+  color: grey;
+}
+
+.card-stats-social {
+  text-align: right;
+}
+
+.card-stats {
+  margin-left: 4px;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+  margin-right: 2px !important;
+  margin-left: 10px;
+  text-transform: none;
+}
+
+
+/* 
+----------------------------------------------------------------------- 
+RECIPE VIEW */
+
+/* Profile card */
+.recipe-profile {
+  margin-bottom: 0px;
+}
+
+.recipe-profile-card {
+  margin-top: 20px;
+  padding: 0px;
+  box-shadow: none;
+}
+
+/* Custom recipe - masonry container */
+.custom-flex-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-left: -4px; /* Gutter adjustment */
+  width: 100%;
+}
+
+/* Custom recipe blocks */
+/*.custom-flex-container div {
+  width: 100%;
+  height: auto;
+  display: inline-block;
+}*/
+
+.masonry-block {
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 4px;
+  position: relative;
+  display: block;
+}
+
+/* Recipe image block */
+.flex-A img { 
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+}
+
+.flex-B {
+/*  background: orange;
+  height: 300px !important;*/
+}
+
+.flex-C {
+  background: yellow;
+  height: 200px !important;
+}
+
+.flex-D {
+/*  background: green;
+  height: 400px !important;*/
+}
+
+.flex-E {
+/*  background: blue;
+  height: 500px !important;*/
+}
+
+.flex-F {
+/*  background: black;
+  height: 100px !important;*/
+}
+
+.card-story {
+  padding: 4px 4px 18px;
+}
+
+
+
+/* Recipe info section */
+.recipe-info-card {
+  color: #000000;
+  margin: 0 0 15px 0;
+  border-radius: 5px;
+  padding-bottom: 6px;
+}
+
+.recipe-info-card > table > thead > tr,
+.recipe-info-card > table > tbody > tr {
+  border-bottom: none;
+}
+
+.recipe-info-card > table > thead > tr > th {
+  padding: 2px 5px;
+}
+
+.recipe-info-card > table > tbody > tr > td {
+  padding: 0 0 15px 5px;
+}
+
+.recipe-howto-card {
+  margin: 0 0 15px 0;
+  border-radius: 5px;
+}
+
+.recipe-howto-card > .card-action {
+  vertical-align: bottom;
+}
+
+.recipe-howto-card > .card-action > .card-share > a > i.tiny {
+  line-height: 14px;
+}
+
+.recipe-howto-card > .card-action > .card-share > a > i.tiny,
+.recipe-howto-card > .card-action > .recipe-social > a > i.tiny {
+  vertical-align: bottom;
+  color: #000000;
+}
+
+.recipe-social {
+  width: 70% !important;
+  float: right;
+}
+
+.card-share > a {
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.recipe-social > a {
+  padding-left: 20px;
+  /*font-family: sans-serif;*/
+  text-transform: uppercase;
+  color: #000000;
+}
+
+
+/* Comments preview */
+.section-header {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 20px 15px 12px 8px;
+}
+
+.comments-preview {
+  display: flex !important;
+  align-items: center;
+}
+
+.comments-preview > .avatar-image-size {
+  width: 16%;
+}
+
+.comments-preview > .avatar-image-size > img {
+  height: 50px;
+}
+
+.visitor-comments {
+  display: block;
+  width: 100%;
+}
+
+
+/* Highlights and links */
+.card.horizontal .card-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 120px;
+  aspect-ratio: 1/1;
+}
+
+/* Materialize card */
+.card.horizontal {
+  width: 99.5%;
+}
+
+
+/* 
+----------------------------------------------------------------------- 
+PROFILE VIEW */
 
 
 /* Profile edit page */
@@ -117,11 +413,15 @@ nav ul a {
 }
 
 
+/* 
+----------------------------------------------------------------------- 
+PROFILE EDIT VIEW */
+
 
 /* Avatar file upload button */
 .collection .collection-item.avatar {
   background: #fafafa;
-  padding: 30px 0px 36px 79px;
+  padding: 30px 0px 36px 70px;
 }
 
 .collection .collection-item.avatar .title {
@@ -129,4 +429,86 @@ nav ul a {
   padding-top: 9px;
   padding-bottom: 32px;
 }
+
+
+/* 
+----------------------------------------------------------------------- 
+MEDIA QUERIES */
+
+
+/* Media max-width 600px */
+@media only screen and (max-width: 600px) {
+  
+
+  /* 
+  ---------------------------------------------------------------------
+  MY RECIPE VIEW */
+
+
+  /* Custom order of colums in mobile view */
+  /* Ref: Stackoverflow by TylerH, more in README.md under credits*/
+  /* Using "order" to re-organize order of columns per media size */
+  .custom-flex-container { 
+    display: flex; 
+    flex-flow: column; 
+  }
+
+  .flex-A { order: 1; }
+  .flex-B { order: 5; }
+  .flex-C { order: 3; }
+  .flex-D { order: 2; }
+  .flex-E { order: 4; }
+  .flex-F { order: 6; }
+
+}
+
+
+/* Media min-width 600px */
+@media only screen and (min-width: 601px) {
+
+
+  /* 
+  ---------------------------------------------------------------------
+  MY RECIPE VIEW */
+
+
+  /* Recipe preview card fixed height in desktop view */
+  .card-title-custom {
+    height: 135px;
+  }
+
+
+  /* 
+  ---------------------------------------------------------------------
+  RECIPE VIEW */
+
+
+  .custom-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 160vw;
+    width: 50%;
+  }
+
+  /* Recipe image block */
+  .flex-A img { 
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+  }
+
+  .card-story {
+    width: 100%;
+  }
+
+  .recipe-edit-button {
+    margin-bottom: 0px;
+  }
+
+  .recipe-profile > .recipe-profile-card {
+    margin-top: 0px;
+  }
+
+}
+
 

@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
   <!-- Custom stylesheet injection -->
   {% block styles %}
+    <!-- Custom styles here -->
   {% endblock %}
   <title>Daily Delights</title>
 </head>
@@ -26,10 +27,11 @@
     <!-- Desktop navbar -->
     <nav>
       <div class="nav-wrapper text-blue #fafafa grey lighten-5">
+        <!-- Logo -->
         <a href="{{ url_for('recipes') }}" class="brand-logo">Daily Delights</a>
         <!-- Mobile menu hamburger button -->
         <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="material-icons hamburger-custom">menu</i></a>
-        <!-- Menu center -->
+        <!-- Desktop menu center -->
         <ul class="custom-menu-center hide-on-med-and-down">
           <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
           <li><a href="{{ url_for('meals') }}">Meals</a></li>
@@ -37,10 +39,10 @@
           <li><a href="{{ url_for('ingredients') }}">Ingredients</a></li>
           <li><a href="{{ url_for('diets') }}">Diets</a></li>
         </ul>
-        <!-- Menu right -->
+        <!-- Desctop menu right -->
         <!-- Session based menu -->
         {% if session.user %}
-          <!-- Dropdown menu -->
+          <!-- Desktop dropdown menu -->
           <ul id="dropdown1" class="dropdown-content">
             <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
             <li class="divider"></li>
@@ -50,9 +52,11 @@
         <ul class="right hide-on-med-and-down">
           {% if session.user %}
             <!-- URL link that is equal to username stored in session cookie -->
+            <!-- Display when user logged in -->
             <li><a href="{{ url_for('my_recipes', account=session["user"]) }}">My Recipes</a></li>
             <li><a class="dropdown-trigger" href="#" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
           {% else %}
+            <!-- Display for visitors -->
             <li><a href="{{ url_for('login') }}">Log In</a></li>
             <li><a href="{{ url_for('register') }}">Register</a></li>
           {% endif %}
@@ -72,9 +76,11 @@
         <!-- URL link that is equal to username stored in session cookie -->
         <li><a href="{{ url_for('my_recipes', account=session["user"]) }}">My Recipes</a></li>
         <!-- URL link that is equal to username stored in session cookie -->
+        <!-- Display when user logged in -->
         <li><a href="{{ url_for('user', account=session["user"]) }}">My Account</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
       {% else %}
+        <!-- Display for visitors -->
         <li><a href="{{ url_for('login') }}">Log In</a></li>
         <li><a href="{{ url_for('register') }}">Register</a></li>
       {% endif %}
@@ -100,6 +106,7 @@
   <!-- Templates extensions --> 
   <main class="container">
     {% block content %}
+      <!-- Template content here -->
     {% endblock %}
   </main>
   <!-- jQuery script -->
@@ -111,6 +118,7 @@
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <!-- Custom script injection -->
   {% block scripts %}
+    <!-- Custom scripts here -->
   {% endblock %}
 </body>
 </html>

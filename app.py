@@ -14,9 +14,6 @@ from werkzeug.utils import secure_filename
 if os.path.exists("env.py"):
     import env
 
-# Image upload path and allowed image formats
-UPLOAD_FOLDER = 'static/images/avatars/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # Flask instance
 app = Flask(__name__)
@@ -25,9 +22,10 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
-# Set image configuration and image size limits
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Set image path, max. size limit and allowed image formats
+app.config['UPLOAD_FOLDER'] = 'static/images/avatars/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
 
 # PyMongo instance, taking 'app' as parameter
 mongo = PyMongo(app)
@@ -76,7 +74,10 @@ def diets():
 
 
 # -----------------------------------------------------------------------------
-# Recipe details page
+# Recipe view - accessible by visitors
+@app.route("/recipe_view")
+def recipe_view():
+    return render_template("recipe_view.html")
 
 
 # -----------------------------------------------------------------------------
@@ -120,6 +121,7 @@ def register():
         # with the inserted_id from mongodb or session cookie created
         # prepare profile for user with user_id for reference
         profile = {
+            "avatar": "",
             "username": request.form.get("username").lower(),
             "website": "",
             "bio": "",
@@ -203,24 +205,86 @@ def profile_edit(account):
     # validate if method is 'POST'
     if request.method == "POST":
 
-        submit = {"$set": {
-            "website": request.form.get("website"),
-            "bio": request.form.get("bio")
-        }}
-        # submit/update input-data in mongodb profiles where user_id equals
+        # PROCESSING IMAGE CONTENT
+        # Credits to Miguel Grinberg and his tutorial on how to save images:
+        # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+        #
+        # Store file from input in variable avatar_file
+        avatar_file = request.files['file']
+        # Store filename in filename with Werkzeug secure_filename() method
+        # This step might be not necessary as I will rename the file below
+        filename = secure_filename(avatar_file.filename)
+
+        # If image request is not empy then process the image file
+        if avatar_file.filename != "":
+            # Validating filename extension:
+            # Extract file extension name with os.path.splitext() method
+            # using [1] seperates the filename before the dot resulting in .jpg
+            # outputting the second part of the splitted content, the content
+            # .jpg has a dot, using str.lstrip(".") to delete the dot
+            file_extension = os.path.splitext(filename)[1].lstrip(".")
+            # Test: print(file_extension) # outputs jpg instead dot .jpg
+            # If extension is none of the ALLOWED_EXTENSIONS defined above
+            if file_extension not in app.config["ALLOWED_EXTENSIONS"]:
+                # Show flash message
+                flash("Please use file formats such as JPG, Jpeg, PNG or Gif.")
+                # and refresh the page
+                account = mongo.db.users.find_one(
+                    {"_id": ObjectId(session["user"])}, {"password": 0})
+                profile = mongo.db.profiles.find_one(
+                    {"user_id": session["user"]})
+                if session["user"]:
+                    return render_template("profile_edit.html",
+                                           account=account, profile=profile)
+
+            # If the extension is one of the ALLOWED_EXTENSIONS
+            if file_extension in app.config["ALLOWED_EXTENSIONS"]:
+                # Re-assign custom filename using user id and extension name
+                # using the user id as image reference to the user
+                filename = session['user'] + "." + file_extension
+                # Test: print(filename)
+                # Then save file using os.path.join()
+                # and the pre-defined image path app.config['UPLOAD_FOLDER']
+                # (see in the very beginning of this file)
+                # and our new custom filename which is the user id
+                # This will overwrite anything stored with the same name
+                # except if the extension is not the same
+                avatar_file.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], filename))
+                # Show flash success message to user
+                flash("Avatar saved")
+
+        # PROCESSING TEXT CONTENT
+        # Include the avatar filename from above if available in the submission
+        # if the first part of splitted filename without the extension .jpg
+        # is equal to the current user
+        avatar_img = filename.rpartition('.')[0]
+        # print("avatar test: " + avatar_img)
+        if avatar_img == session["user"]:
+            submit = {"$set": {
+                "avatar": filename,
+                "website": request.form.get("website"),
+                "bio": request.form.get("bio")
+            }}
+        # if filename is not available then prepare the submission like below
+        else:
+            # Test: print("no avatar updates")
+            submit = {"$set": {
+                "website": request.form.get("website"),
+                "bio": request.form.get("bio")
+            }}
+
+        # Submit input-data in mongodb/profiles where user_id equals
         # the session cookie stored during registration or login
-        mongo.db.profiles.update({"user_id": session["user"]}, submit)
+        mongo.db.profiles.update_one({"user_id": session["user"]}, submit)
         # show success message to user
         flash("Profile Successfully Updated")
-        # query the updated data just stored in profiles
+        # query the updated profile data and store in 'profile'
         profile = mongo.db.profiles.find_one(
             {"user_id": session["user"]})
-        # and render the page with newly stored/updated data
+        # then return to my_repices.html
+        # and render the page with updated data in 'profile'
         return render_template("my_recipes.html", profile=profile)
-        # return render_template("profile.html", profile=profile)
-
-        # avatar logic
-        # avatar should be saved
 
     # query/store user-data where ObjectId is equal to session cookie
     # stored during log in but exclude password
@@ -236,25 +300,6 @@ def profile_edit(account):
     if session["user"]:
         return render_template("profile_edit.html",
                                account=account, profile=profile)
-    # if not truthy, redirect visitor to login page
-    return redirect(url_for("login"))
-
-
-# -----------------------------------------------------------------------------
-# Upload, save avatar
-@app.route("/upload_avatar/<account>", methods=['POST', 'GET'])
-def upload_avatar(account):
-    if request.method == 'POST':
-        avatar_file = request.files['file']
-        if avatar_file.filename != "":
-            avatar_file.save(secure_filename(avatar_file.filename))
-            flash("File saved successfully")
-        return redirect("profile_edit")
-
-    # if 'user' session cookie truthy, render edit_user.html
-    # passing account and profile data
-    if session["user"]:
-        return render_template("upload_avatar.html", account=account)
     # if not truthy, redirect visitor to login page
     return redirect(url_for("login"))
 

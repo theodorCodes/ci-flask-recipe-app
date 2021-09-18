@@ -4,36 +4,46 @@
 {% block content %}
   <!-- Page content title -->
   <h3 class="center-align">My Recipes</h3>
-  <!-- Cancel button -->
+  <!-- Edit button -->
   <div class="row">
     <div class="col s12 custom-button-right">
       <!-- Materialize button small and custom styling, link to edit_user.html where session cookie is required -->
       <a href="{{ url_for('profile_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Edit Profile</a>
     </div>
   </div>
-  <!-- Profile card section - Materialize card and media wrapper -->
-  <div class="col s12 m8 offset-m2 l6 offset-l3">
+  <!-- Profile section - Materialize card -->
+  <section class="col s12 m8 offset-m2 l6 offset-l3">
     <div class="card-panel grey lighten-5 z-depth-1">
       <!-- Profile wrapper -->
       <div class="row valign-wrapper">
         <!-- Profile Avatar -->
-        <div class="col m1 s3 avatar-image-size">
-          <img src="{{url_for('static', filename='images/avatars/avatar-placeholder.jpg')}}" alt="" class="circle">
+        <div class="col m1 s2 avatar-image-size">
+          <!-- If avatar in profile available -->
+          {% if profile.avatar != "" %}
+            <!-- show profile image where filename is equal to profile avator image name -->
+            <img src="{{ url_for('static', filename='images/avatars/' + profile.avatar ) }}" alt="" class="circle">
+          {% else %}
+            <img src="{{url_for('static', filename='images/avatars/avatar-placeholder.jpg')}}" alt="" class="circle">
+          {% endif %}
         </div>
         <!-- Profile Social stats -->
-        <div class="col m11 s9 custom-card-section">
+        <div class="col m11 s10 custom-card-section">
           <div class="profile-content profile-name col s12 black-text">
             {{ profile.username }}
           </div>
+          <!-- Recipes count -->
           <div class="social-stats grey-text">
             Recipes <span class="title black-text">87</span>
           </div>
+          <!-- Followers count -->
           <div class="social-stats grey-text">
             Followers <span class="title black-text">108</span>
           </div>
+          <!-- Recipes liked/ or saved -->
           <div class="social-stats grey-text">
             Recipes Liked <span class="title black-text">27</span>
           </div>
+          <!-- Profiles following -->
           <div class="social-stats grey-text">
             Following <span class="title black-text">39</span>
           </div>
@@ -53,6 +63,40 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Recipe catalog section -->
+  <section class="row custom-recipe-container">
+
+    <!-- Recipe preview card -->
+    <div class="col s12 m4">
+      <div class="card">
+        <!-- Image preview and button to recipe -->
+        <div class="card-image-custom">
+          <a href="{{ url_for('recipe_view') }}">
+            <img src="{{url_for('static', filename='images/recipes/cala-w6ftFbPCs9I-unsplash.jpg')}}" alt="recipe-image">
+          </a>
+        </div>
+        <!-- Title and subtitle -->
+        <div class="card-content">
+          <p class="card-subtitle">Salads</p>
+          <p class="card-title-custom">Limit this text length to 145 characters total.</p>
+        </div>
+        <!-- Social stats -->
+        <div class="card-action">
+          <span class="card-stats-time">
+            <i class="prefix material-icons tiny">timer</i>
+            15 min.
+          </span>
+          <div class="card-stats-social">
+            <a href="#">Comments</a><span class="card-stats">46</span>
+            <a href="#">Likes</a><span class="card-stats">10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
 <!-- Jinja content block END -->
 {% endblock %}
