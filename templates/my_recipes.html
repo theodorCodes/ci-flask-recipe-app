@@ -4,13 +4,15 @@
 {% block content %}
   <!-- Page content title -->
   <h3 class="center-align">My Recipes</h3>
-  <!-- Edit button -->
+
+  <!-- Edit profile button -->
   <div class="row">
     <div class="col s12 custom-button-right">
       <!-- Materialize button small and custom styling, link to edit_user.html where session cookie is required -->
       <a href="{{ url_for('profile_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Edit Profile</a>
     </div>
   </div>
+  
   <!-- Profile section - Materialize card -->
   <section class="col s12 m8 offset-m2 l6 offset-l3">
     <div class="card-panel grey lighten-5 z-depth-1">
@@ -64,6 +66,14 @@
       </div>
     </div>
   </section>
+
+  <!-- Add recipe button -->
+  <div class="row">
+    <div class="col s12 custom-button-right add-recipe-button">
+      <!-- Materialize button small and custom styling, link to edit_user.html where session cookie is required -->
+      <a href="{{ url_for('recipe_add') }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Add Recipe</a>
+    </div>
+  </div>
 
   <!-- Recipe catalog section -->
   <section class="row custom-recipe-container">

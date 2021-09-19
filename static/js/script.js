@@ -4,5 +4,7 @@ $(document).ready(function () {
     $(".sidenav").sidenav({edge: "right"});
     // Desktop menu - dropdown
     $(".dropdown-trigger").dropdown({hover: false});
+    // Select - in recipe edit
+    $('select').formSelect();
 });
 

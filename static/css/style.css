@@ -75,7 +75,7 @@ nav ul a {
   font-size: 12px;
   box-shadow: none;
   border: 1px solid #000;
-  border-radius: 18px;
+  border-radius: 20px;
 }
 
 /* Button style custom without border */
@@ -146,6 +146,15 @@ MY RECIPE VIEW */
 /* Profile edit - Avatar section */
 .row.card > .collection {
   border: none;
+}
+
+.add-recipe-button {
+  padding-top: 16px !important;
+}
+
+.add-recipe-button > a {
+  width: 100%;
+  height: auto;
 }
 
 
@@ -398,6 +407,38 @@ RECIPE VIEW */
 
 /* 
 ----------------------------------------------------------------------- 
+ADD RECIPE VIEW */
+
+
+/* Submit button big */
+.recipe-button-add {
+  padding: 25px !important;
+}
+
+.submit-recipe {
+  width: 100%;
+  height: 2.8rem;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 1.2px;
+  color: #FFF;
+}
+
+.recipe-image-add {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.recipe-image-add > input {
+  padding-top: 30px;
+  padding-left: 2px;
+
+}
+
+
+/* 
+----------------------------------------------------------------------- 
 PROFILE VIEW */
 
 
@@ -477,6 +518,10 @@ MEDIA QUERIES */
     height: 135px;
   }
 
+  .add-recipe-button > a {
+    width: 180px;
+  }
+
 
   /* 
   ---------------------------------------------------------------------
@@ -508,6 +553,20 @@ MEDIA QUERIES */
   .recipe-profile > .recipe-profile-card {
     margin-top: 0px;
   }
+
+
+  /* 
+  ---------------------------------------------------------------------
+  RECIPE ADD VIEW */
+
+
+  .recipe-image-add {
+    padding-left: 54px !important;
+    display: flex;
+    align-items: flex-start;
+  }
+
+
 
 }
 

@@ -8,13 +8,15 @@
   <h4 class="left-align">How To Grill Peaches In a Hot Oven</h4>
   <!-- Recipe subtitle -->
   <h6 class="left-align"><span>Category </span>Peach Dessert</h6>
+
   <!-- Edit button -->
   <div class="row recipe-edit-button">
     <div class="col s12 custom-button-right">
       <!-- Materialize button small and custom styling, link to edit_user.html where session cookie is required -->
-      <a href="{{ url_for('profile_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Edit</a>
+      <a href="{{ url_for('recipe_edit', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Edit</a>
     </div>
   </div>
+  
   <!-- Profile section - Materialize card -->
   <section class="row s12 m8 offset-m2 l6 offset-l3 recipe-profile">
     <div class="card-panel recipe-profile-card">
@@ -101,7 +103,7 @@
         </div>
       </div>
 
-      <!-- Social highlight section -->
+      <!-- Article link and writers highlight section -->
       <div class="flex-C masonry-block">C
       </div>
 

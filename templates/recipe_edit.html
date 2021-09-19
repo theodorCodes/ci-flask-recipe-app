@@ -2,5 +2,13 @@
 {% extends "base.html" %}
 <!-- Jinja - inject content into base.html -->
 {% block content %}
-
+  <!-- Page content title -->
+  <h3 class="center-align">Edit Recipe</h3>
+  <!-- Cancel button -->
+  <div class="row">
+    <div class="col s12 custom-button-right">
+      <!-- Materialize button small and custom styling, link to edit_user.html where session cookie is required -->
+      <a href="{{ url_for('recipe_view', account=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Cancel</a>
+    </div>
+  </div>
 {% endblock %}
