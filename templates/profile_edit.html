@@ -20,10 +20,10 @@
     <div class="row card grey lighten-5">
       <ul class="collection">
         <li class="collection-item avatar">
-          <!-- If avatar in profile available -->
+          <!-- If avatar image in profile available -->
           {% if profile.avatar != "" %}
             <!-- show profile image where filename is equal to profile avator image name -->
-            <img src="{{ url_for('static', filename='images/avatars/' + profile.avatar ) }}" alt="" class="circle">
+            <img src="../static/images/avatars/{{ profile.avatar }}" alt="" class="circle">
           {% else %}
             <img src="{{url_for('static', filename='images/avatars/avatar-placeholder.jpg')}}" alt="" class="circle">
           {% endif %}

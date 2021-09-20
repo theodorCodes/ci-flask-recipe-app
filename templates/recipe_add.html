@@ -13,7 +13,7 @@
   </div>
 
   <!-- Form to add new recipe -->
-  <form class="col s12" method="POST" action="{{ url_for('recipe_add') }}">
+  <form class="col s12" method="POST" action="{{ url_for('recipe_add') }}" enctype="multipart/form-data">
 
     <!-- Recipe title and subtitle -->
     <div class="row card-panel grey lighten-5">
@@ -46,12 +46,12 @@
           <input type="file" name="file">
         </div>
       </div>
-      <!-- Recipe, image story -->
+      <!-- Recipe image story -->
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">create</i>
-          <textarea id="recipe-story" name="recipe-story" minlength="5" maxlength="500" class="materialize-textarea validate"></textarea>
-          <label for="recipe-story">Recipe story</label>
+          <textarea id="recipe_story" name="recipe_story" minlength="5" maxlength="500" class="materialize-textarea validate"></textarea>
+          <label for="recipe_story">Recipe story</label>
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">local_pizza</i>
-          <select id="meal" name="meal" class="validate" required>
+          <select id="meal" name="meal" class="validate">
             <option value="" disabled selected>Choose a meal category</option>
             {% for meal in meals %}
             <option value="{{ meal.meal }}">{{ meal.meal }}</option>
@@ -104,7 +104,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">restaurant</i>
-          <select id="cuisine" name="cuisine" class="validate" required>
+          <select id="cuisine" name="cuisine" class="validate">
             <option value="" disabled selected>Choose cuisine category</option>
             {% for cuisine in cuisines %}
             <option value="{{ cuisine.cuisine }}">{{ cuisine.cuisine }}</option>
@@ -117,7 +117,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">local_pharmacy</i>
-          <select id="diet" name="diet" class="validate" required>
+          <select id="diet" name="diet" class="validate">
             <option value="" disabled selected>Choose diet category</option>
             {% for diet in diets %}
             <option value="{{ diet.diet }}">{{ diet.diet }}</option>
@@ -130,7 +130,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">timer</i>
-          <input id="preptime" name="preptime" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate" required>
+          <input id="preptime" name="preptime" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate">
           <label for="preptime">Prep Time</label>
         </div>
       </div>
@@ -138,7 +138,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">timelapse</i>
-          <input id="cooktime" name="cooktime" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate" required>
+          <input id="cooktime" name="cooktime" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate">
           <label for="cooktime">Cook Time</label>
         </div>
       </div>
@@ -146,7 +146,7 @@
       <div class="row">
         <div class="input-field col s12">
           <i class="prefix material-icons">people_outline</i>
-          <input id="yield" name="yield" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate" required>
+          <input id="yield" name="yield" type="text" minlength="1" maxlength="5" pattern="^[0-9-]{1,5}$" class="validate">
           <label for="yield">Yield</label>
         </div>
       </div>

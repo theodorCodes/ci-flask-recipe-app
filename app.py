@@ -23,7 +23,8 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
 # Set image path, max. size limit and allowed image formats
-app.config['UPLOAD_FOLDER'] = 'static/images/avatars/'
+app.config['UPLOAD_FOLDER_AVATAR'] = 'static/images/avatars/'
+app.config['UPLOAD_FOLDER_RECIPE'] = 'static/images/recipes/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
 
@@ -75,17 +76,25 @@ def diets():
 
 # -----------------------------------------------------------------------------
 # Recipe view - accessible by visitors
-@app.route("/recipe_view")
-def recipe_view():
-    return render_template("recipe_view.html")
+@app.route("/recipe_view/<recipe_id>")
+def recipe_view(recipe_id):
+
+    profile = mongo.db.profiles.find_one(
+        {"user_id": session["user"]})
+
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+
+    return render_template("recipe_view.html", profile=profile, recipe=recipe)
 
 
 # -----------------------------------------------------------------------------
 # User add recipe
-@app.route("/recipe_add", methods=["GET", "POST"])
-def recipe_add():
+@app.route("/recipe_edit/<recipe_id>", methods=["GET", "POST"])
+def recipe_edit(recipe_id):
     if request.method == "POST":
-        recipe = {
+
+        # Prepare recipe content for insert with $set
+        recipe_update = {"$set": {
             "title": request.form.get("title"),
             "subtitle": request.form.get("subtitle"),
             "cuisine": request.form.get("cuisine"),
@@ -98,12 +107,190 @@ def recipe_add():
             "utensils": request.form.get("utensils"),
             "instructions": request.form.get("instructions"),
             "recipe_story": request.form.get("recipe_story"),
-            "likes": "",
-            "comments": "",
+        }}
+        # UPDATE, storing update data without the image in MongoDB
+        mongo.db.recipes.update_one(
+            {"_id": ObjectId(recipe_id)}, recipe_update)
+
+        # Processing the image
+        # For more info please read comments in recipe_add() profile_edit()
+        recipe_img = request.files['file']
+        filename = secure_filename(recipe_img.filename)
+
+        # If image in exists
+        if recipe_img.filename != "":
+            # split filename and store second part (.jpg) in file_extension
+            file_extension = os.path.splitext(filename)[1].lstrip(".")
+
+            # If file extension is not allowed
+            if file_extension not in app.config["ALLOWED_EXTENSIONS"]:
+                flash("Please use file formats such as JPG, Jpeg, PNG or Gif.")
+                return redirect(url_for("recipe_view"))
+
+            # If file extension is allowed
+            if file_extension in app.config["ALLOWED_EXTENSIONS"]:
+
+                # Create "new" filename with stored "recipe ObjectId"
+                filename = str(recipe_id) + "." + file_extension
+
+                # and save image in existing recipe upload folder
+                # will overwrite the current, if available with the same name
+                recipe_img.save(os.path.join(
+                    app.config['UPLOAD_FOLDER_RECIPE'], filename))
+
+                # Prepare recipe_image to be uploaded using $set
+                # will overwrite the current, if available with the same name
+                recipe_image = {"$set": {
+                    "recipe_image": filename
+                }}
+
+                # UPDATE the newly created recipe_image name to the same recipe
+                # above, using the stored recipe_id to find the recipe in MongoDB
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, recipe_image)
+
+                # Send success message to user
+                flash("Image saved")
+
+        # Back to recipe_view
+        # Flash message to user
+        flash("Recipe Added")
+
+        profile = mongo.db.profiles.find_one(
+            {"user_id": session["user"]})
+
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+
+        return render_template("recipe_view.html", profile=profile, recipe=recipe)
+
+    # Get recipe data
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    # Get categories from MongoDB
+    cookingtime = mongo.db.cookingtime.find().sort("cooktime", 1)
+    cuisines = mongo.db.cuisines.find().sort("cuisine", 1)
+    diets = mongo.db.diets.find().sort("diet", 1)
+    ingredients = mongo.db.ingredients.find().sort("ingredient", 1)
+    meals = mongo.db.meals.find().sort("meal", 1)
+    # render page with the categories from above
+    return render_template(
+        "recipe_edit.html", recipe=recipe, cookingtime=cookingtime,
+        cuisines=cuisines, diets=diets, ingredients=ingredients, meals=meals)
+
+
+# -----------------------------------------------------------------------------
+# User add recipe
+@app.route("/recipe_add", methods=["GET", "POST"])
+def recipe_add():
+    if request.method == "POST":
+        # Prepare recipe content for insert
+        recipe = {
+            "title": request.form.get("title"),
+            "subtitle": request.form.get("subtitle"),
+            "cuisine": request.form.get("cuisine"),
+            "diet": request.form.get("diet"),
+            "meal": request.form.get("meal"),
+            "preptime": request.form.get("preptime"),
+            "cooktime": request.form.get("cooktime"),
+            "yield": request.form.get("yield"),
+            "ingredients": request.form.get("ingredients"),
+            "utensils": request.form.get("utensils"),
+            "instructions": request.form.get("instructions"),
+            "recipe_image": "",
+            "recipe_story": request.form.get("recipe_story"),
+            "likes": [],
+            "comments": [],
             "author": session["user"]
         }
-        mongo.db.recipes.insert_one(recipe)
-        flash("Recipe Successfully Added")
+        # INSERT and retrieve inserted recipe ObjectID at the same time
+        recipe_object = mongo.db.recipes.insert_one(recipe)
+        # The above stores the given data without the image in MongoDB
+
+        # Test: print(recipe_object.inserted_id)
+        # Using (MongoDB provided) .inserted_id,
+        # and converting recipe ObjectId into a string
+        recipe_id = str(recipe_object.inserted_id)
+        # Test: print(recipe_id)
+
+        # Processing the image
+        # For full explanation of this code, please read the def profile_edit().
+        recipe_img = request.files['file']
+        filename = secure_filename(recipe_img.filename)
+
+        # If image in exists
+        if recipe_img.filename != "":
+            # split filename and store second part (.jpg) in file_extension
+            file_extension = os.path.splitext(filename)[1].lstrip(".")
+
+            # If file extension is not allowed
+            if file_extension not in app.config["ALLOWED_EXTENSIONS"]:
+                flash("Please use file formats such as JPG, Jpeg, PNG or Gif.")
+                # query and store profile data where user_id
+                # is equal to session cookie stored
+                profile = mongo.db.profiles.find_one(
+                    {"user_id": session["user"]})
+                # Load available recipes
+                recipes = list(mongo.db.recipes.find(
+                    {"author": session["user"]}))
+                # if session cookie truthy,
+                # then render my_recipes.html with profile information
+                if session["user"]:
+                    return render_template("my_recipes.html", profile=profile, recipes=recipes)
+                # if not truthy, redirect visitor to login page
+                return redirect(url_for("login"))
+
+            # If file extension is allowed
+            if file_extension in app.config["ALLOWED_EXTENSIONS"]:
+
+                # Create "new" filename with "recipe ObjectId"
+                filename = str(recipe_id) + "." + file_extension
+
+                # and save image in existing recipe upload folder
+                recipe_img.save(os.path.join(
+                    app.config['UPLOAD_FOLDER_RECIPE'], filename))
+
+                # Prepare recipe_image to be uploaded using "$set"
+                recipe_image = {"$set": {
+                    "recipe_image": filename
+                }}
+
+                # UPDATE the newly created recipe_image name to the same recipe
+                # above, using the stored recipe_id to find the recipe in MongoDB
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, recipe_image)
+
+                # Send success message to user
+                flash("Image saved")
+
+        # If no image upload
+        # Prepare recipe ObjectId update to profile,
+        # using $addToSet to add to existing recipe 'list' if available
+        # this somehow works only because I have already created an empty
+        # recipe array for the profile at the def register() function
+        recipe_added = {"$addToSet": {
+            "recipes": recipe_id
+        }}
+
+        # UPDATE users profile with ObjectID of added recipe
+        profile = mongo.db.profiles.update_one(
+            {"user_id": session["user"]}, recipe_added)
+
+        # Flash message to user
+        flash("Recipe Added")
+
+        # Load profile
+        profile = mongo.db.profiles.find_one(
+            {"user_id": session["user"]})
+
+        # Load available recipes
+        recipes = list(mongo.db.recipes.find({"author": session["user"]}))
+
+        # Return user to my_recipe/profile page if session cookie is ok
+        if session["user"]:
+            return render_template("my_recipes.html", profile=profile, recipes=recipes)
+
+        # Or log user out if no session cookie
+        return redirect(url_for("login"))
+
     # get categories from MongoDB
     cookingtime = mongo.db.cookingtime.find().sort("cooktime", 1)
     cuisines = mongo.db.cuisines.find().sort("cuisine", 1)
@@ -115,16 +302,23 @@ def recipe_add():
 
 
 # -----------------------------------------------------------------------------
-# User add recipe
-@app.route("/recipe_edit/<account>", methods=["GET", "POST"])
-def recipe_edit(account):
-    # query, store profile data where user_id is equal session cookie stored
+# User my_recipes, profile page
+# with user id in route, preventing visitors without cookie to see this page
+@ app.route("/my_recipes/<account>", methods=["GET", "POST"])
+# and passing user id here as argument
+def my_recipes(account):
+    # Query profile data where user_id is equal session cookie stored
     profile = mongo.db.profiles.find_one(
         {"user_id": session["user"]})
+
+    # Query profiles recipe data where author is equal session cookie stored
+    # store as list to loop through in my_recipes.html
+    recipes = list(mongo.db.recipes.find({"author": session["user"]}))
+
     # if session cookie truthy,
-    # then render recipe_edit.html with profile information
+    # then render my_recipes.html with profile information
     if session["user"]:
-        return render_template("recipe_edit.html", profile=profile)
+        return render_template("my_recipes.html", profile=profile, recipes=recipes)
     # if not truthy, redirect visitor to login page
     return redirect(url_for("login"))
     # account cookie is set required in menu link at base.html file
@@ -176,7 +370,9 @@ def register():
             "username": request.form.get("username").lower(),
             "website": "",
             "bio": "",
-            "user_id": session["user"]
+            "user_id": session["user"],
+            "recipes": [],
+            "followers": []
         }
         # and insert profile in to mongodb profiles collection
         mongo.db.profiles.insert_one(profile)
@@ -231,25 +427,6 @@ def login():
 
 
 # -----------------------------------------------------------------------------
-# User my_recipes, profile page
-# with user id in route, preventing visitors without cookie to see this page
-@ app.route("/my_recipes/<account>", methods=["GET", "POST"])
-# and passing user id here as argument
-def my_recipes(account):
-    # query, store profile data where user_id is equal session cookie stored
-    profile = mongo.db.profiles.find_one(
-        {"user_id": session["user"]})
-    # if session cookie truthy,
-    # then render my_recipes.html with profile information
-    if session["user"]:
-        return render_template("my_recipes.html", profile=profile)
-    # if not truthy, redirect visitor to login page
-    return redirect(url_for("login"))
-    # account cookie is set required in menu link at base.html file
-    # ensuring that only identified users can load their profile
-
-
-# -----------------------------------------------------------------------------
 # User profile edit page
 @ app.route("/profile_edit/<account>", methods=["GET", "POST"])
 def profile_edit(account):
@@ -275,13 +452,13 @@ def profile_edit(account):
             # .jpg has a dot, using str.lstrip(".") to delete the dot
             file_extension = os.path.splitext(filename)[1].lstrip(".")
             # Test: print(file_extension) # outputs jpg instead dot .jpg
-            # If extension is none of the ALLOWED_EXTENSIONS defined above
+            # If extension is none of the ALLOWED_EXTENSIONS defined (see above)
             if file_extension not in app.config["ALLOWED_EXTENSIONS"]:
                 # Show flash message
                 flash("Please use file formats such as JPG, Jpeg, PNG or Gif.")
                 # and refresh the page
                 account = mongo.db.users.find_one(
-                    {"_id": ObjectId(session["user"])}, {"password": 0})
+                    {"_id": ObjectId(session["user"])})["_id"]
                 profile = mongo.db.profiles.find_one(
                     {"user_id": session["user"]})
                 if session["user"]:
@@ -290,18 +467,18 @@ def profile_edit(account):
 
             # If the extension is one of the ALLOWED_EXTENSIONS
             if file_extension in app.config["ALLOWED_EXTENSIONS"]:
-                # Re-assign custom filename using user id and extension name
-                # using the user id as image reference to the user
+                # Re-assign custom filename using "users id" and extension name
+                # using the user id as image reference to the profile
                 filename = session['user'] + "." + file_extension
                 # Test: print(filename)
                 # Then save file using os.path.join()
-                # and the pre-defined image path app.config['UPLOAD_FOLDER']
+                # and the pre-defined image path app.config['UPLOAD_FOLDER_AVATAR']
                 # (see in the very beginning of this file)
                 # and our new custom filename which is the user id
                 # This will overwrite anything stored with the same name
                 # except if the extension is not the same
                 avatar_file.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], filename))
+                    app.config['UPLOAD_FOLDER_AVATAR'], filename))
                 # Show flash success message to user
                 flash("Avatar saved")
 
@@ -311,7 +488,9 @@ def profile_edit(account):
         # is equal to the current user
         avatar_img = filename.rpartition('.')[0]
         # print("avatar test: " + avatar_img)
+        # Checking again if logged in user is equal to avatar image name
         if avatar_img == session["user"]:
+            # using $set to not overwrite document with empty content
             submit = {"$set": {
                 "avatar": filename,
                 "website": request.form.get("website"),
@@ -328,14 +507,27 @@ def profile_edit(account):
         # Submit input-data in mongodb/profiles where user_id equals
         # the session cookie stored during registration or login
         mongo.db.profiles.update_one({"user_id": session["user"]}, submit)
-        # show success message to user
+        # Show success message to user
         flash("Profile Successfully Updated")
-        # query the updated profile data and store in 'profile'
+
+        # Query account data id
+        account = mongo.db.users.find_one(
+            {"_id": ObjectId(session["user"])})["_id"]
+        print("Account info: " + str(account))
+
+        # Query the updated profile data and store in 'profile'
         profile = mongo.db.profiles.find_one(
             {"user_id": session["user"]})
+
+        # Query recipes available
+        recipes = list(mongo.db.recipes.find({"author": session["user"]}))
+
         # then return to my_repices.html
-        # and render the page with updated data in 'profile'
-        return render_template("my_recipes.html", profile=profile)
+        # and render the page with updated profile data
+        # return render_template("my_recipes.html", profile=profile)
+        if session["user"]:
+            return render_template(
+                "my_recipes.html", account=account, profile=profile, recipes=recipes)
 
     # query/store user-data where ObjectId is equal to session cookie
     # stored during log in but exclude password

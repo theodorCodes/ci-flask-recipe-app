@@ -85,6 +85,18 @@ nav ul a {
 
 
 /* 
+-----------------------------------------------------------------------
+*/
+
+
+/* Flash message color */
+.flash-message {
+  color: #41a6ff;
+  font-family: sans-serif;
+}
+
+
+/* 
 ----------------------------------------------------------------------- 
 ACCOUNT VIEW */
 
@@ -245,6 +257,30 @@ RECIPE VIEW */
   box-shadow: none;
 }
 
+
+
+
+/* Recipe view - main containers */
+.recipe-flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container-A {
+  width: 100%;
+}
+
+.flex-container-B {
+  width: 100%;
+}
+
+
+
+
+
+
+
+
 /* Custom recipe - masonry container */
 .custom-flex-container {
   display: flex;
@@ -252,13 +288,6 @@ RECIPE VIEW */
   margin-left: -4px; /* Gutter adjustment */
   width: 100%;
 }
-
-/* Custom recipe blocks */
-/*.custom-flex-container div {
-  width: 100%;
-  height: auto;
-  display: inline-block;
-}*/
 
 .masonry-block {
   overflow: hidden;
@@ -269,35 +298,20 @@ RECIPE VIEW */
 }
 
 /* Recipe image block */
+.flex-A { 
+  min-height: 600px; /* To keep masonry look good */
+}
+
 .flex-A img { 
   object-fit: cover;
   width: 100%;
   height: auto;
-}
-
-.flex-B {
-/*  background: orange;
-  height: 300px !important;*/
+  min-height: 520px; /* To keep masonry look good */
 }
 
 .flex-C {
   background: yellow;
   height: 200px !important;
-}
-
-.flex-D {
-/*  background: green;
-  height: 400px !important;*/
-}
-
-.flex-E {
-/*  background: blue;
-  height: 500px !important;*/
-}
-
-.flex-F {
-/*  background: black;
-  height: 100px !important;*/
 }
 
 .card-story {
@@ -325,6 +339,7 @@ RECIPE VIEW */
 
 .recipe-info-card > table > tbody > tr > td {
   padding: 0 0 15px 5px;
+  text-transform: capitalize;
 }
 
 .recipe-howto-card {
@@ -433,7 +448,18 @@ ADD RECIPE VIEW */
 .recipe-image-add > input {
   padding-top: 30px;
   padding-left: 2px;
+}
 
+
+/* 
+----------------------------------------------------------------------- 
+RECIPE EDIT VIEW */
+
+
+.recipe-image-add img {
+  object-fit: cover;
+  width: 168px;
+  height: 168px;
 }
 
 
@@ -528,6 +554,11 @@ MEDIA QUERIES */
   RECIPE VIEW */
 
 
+  .recipe-flex-container {
+    display: flex;
+    flex-direction: row;
+  }
+
   .custom-flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -564,6 +595,18 @@ MEDIA QUERIES */
     padding-left: 54px !important;
     display: flex;
     align-items: flex-start;
+  }
+
+
+  /* 
+  ---------------------------------------------------------------------
+  RECIPE EDIT VIEW */
+
+
+  .recipe-image-add img {
+    object-fit: cover;
+    width: 168px;
+    height: 168px;
   }
 
 

@@ -23,7 +23,7 @@
           <!-- If avatar in profile available -->
           {% if profile.avatar != "" %}
             <!-- show profile image where filename is equal to profile avator image name -->
-            <img src="{{ url_for('static', filename='images/avatars/' + profile.avatar ) }}" alt="" class="circle">
+            <img src="../static/images/avatars/{{ profile.avatar }}" alt="" class="circle">
           {% else %}
             <img src="{{url_for('static', filename='images/avatars/avatar-placeholder.jpg')}}" alt="" class="circle">
           {% endif %}
@@ -65,6 +65,7 @@
         </div>
       </div>
     </div>
+  <!-- Profile section END -->
   </section>
 
   <!-- Add recipe button -->
@@ -75,38 +76,54 @@
     </div>
   </div>
 
-  <!-- Recipe catalog section -->
-  <section class="row custom-recipe-container">
-
-    <!-- Recipe preview card -->
-    <div class="col s12 m4">
-      <div class="card">
-        <!-- Image preview and button to recipe -->
-        <div class="card-image-custom">
-          <a href="{{ url_for('recipe_view') }}">
-            <img src="{{url_for('static', filename='images/recipes/cala-w6ftFbPCs9I-unsplash.jpg')}}" alt="recipe-image">
-          </a>
-        </div>
-        <!-- Title and subtitle -->
-        <div class="card-content">
-          <p class="card-subtitle">Salads</p>
-          <p class="card-title-custom">Limit this text length to 145 characters total.</p>
-        </div>
-        <!-- Social stats -->
-        <div class="card-action">
-          <span class="card-stats-time">
-            <i class="prefix material-icons tiny">timer</i>
-            15 min.
-          </span>
-          <div class="card-stats-social">
-            <a href="#">Comments</a><span class="card-stats">46</span>
-            <a href="#">Likes</a><span class="card-stats">10</span>
+  <!-- Jinja - check if recipes available in profile -->
+  {% if profile.recipes|length > 0 %}
+    <!-- Recipe catalog section -->
+    <section class="row custom-recipe-container">
+      {% for recipe in recipes %}
+        <!-- Recipe preview card -->
+        <div class="col s12 m4">
+          <div class="card">
+            <!-- Image preview and button to recipe -->
+            <div class="card-image-custom">              
+              <!-- If recipe image in recipe available -->
+              {% if recipe.recipe_image != "" %}
+                <!-- Passing "recipe_id" here in href as link or reference -->
+                <!-- Note: where recipe_id equals recipe.(dot)_id -->
+                <a href="{{ url_for('recipe_view', recipe_id=recipe._id) }}">
+                  <!-- show profile image where filename is equal to profile avator image name -->
+                  <img src="../static/images/recipes/{{ recipe.recipe_image }}" alt="recipe-image">
+                </a>
+              {% else %}
+                <a href="{{ url_for('recipe_view', recipe_id=recipe._id) }}">
+                  <img src="{{url_for('static', filename='images/recipes/recipe-placeholder.jpg')}}" alt="image-placeholder">
+                </a>
+              {% endif %}
+            </div>
+            <!-- Title and subtitle -->
+            <div class="card-content">
+              <p class="card-subtitle">{{ recipe.subtitle }}</p>
+              <p class="card-title-custom">{{ recipe.title }}</p>
+            </div>
+            <!-- Social stats -->
+            <div class="card-action">
+              <span class="card-stats-time">
+                <i class="prefix material-icons tiny">timer</i>
+                {{ recipe.cooktime }}
+              </span>
+              <div class="card-stats-social">
+                <a href="#">Comments</a><span class="card-stats">{{ recipe.comments|length }}</span>
+                <a href="#">Likes</a><span class="card-stats">{{ recipe.likes|length }}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-  </section>
-
+      {% endfor %}
+    <!-- Recipe catalog section END -->
+    </section>
+  <!-- Jinja - if no recipes available -->
+  {% else %}
+    <h5>Start sharing your recipes and join the conversation.</h5>
+  {% endif %}
 <!-- Jinja content block END -->
 {% endblock %}

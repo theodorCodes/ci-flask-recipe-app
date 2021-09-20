@@ -23,7 +23,8 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
 # Set image path, max. size limit and allowed image formats
-app.config['UPLOAD_FOLDER'] = 'static/images/avatars/'
+app.config['UPLOAD_FOLDER_AVATAR'] = 'static/images/avatars/'
+app.config['UPLOAD_FOLDER_RECIPE'] = 'static/images/recipes/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
 
@@ -295,13 +296,13 @@ def profile_edit(account):
                 filename = session['user'] + "." + file_extension
                 # Test: print(filename)
                 # Then save file using os.path.join()
-                # and the pre-defined image path app.config['UPLOAD_FOLDER']
+                # and the pre-defined image path app.config['UPLOAD_FOLDER_AVATAR']
                 # (see in the very beginning of this file)
                 # and our new custom filename which is the user id
                 # This will overwrite anything stored with the same name
                 # except if the extension is not the same
                 avatar_file.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], filename))
+                    app.config['UPLOAD_FOLDER_AVATAR'], filename))
                 # Show flash success message to user
                 flash("Avatar saved")
 
