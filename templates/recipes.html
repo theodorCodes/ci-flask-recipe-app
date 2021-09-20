@@ -2,6 +2,79 @@
 {% extends "base.html" %}
 <!-- Jinja - inject content into base.html -->
 {% block content %}
+  <!--
   <h3 class="center-align">Recipes Overview</h3>
+  -->
 
+  <!-- search form -->
+  <section class="search-bar">  
+    <form action="{{ url_for('search') }}" method="post" class="col s12">
+      <div class="row valign-wrapper center-align">
+        <div class="input-field col s12 m8">
+          <!-- Search index required -->
+          <input type="text" name="query" id="query" minlength="3" class="validate" required>
+          <label for="query">Search recipes, meals, cuisines, ingredients & more</label>
+        </div>
+        <div class="col s12 m4">
+          <!-- Reset button - reload page -->
+          <a href="{{ url_for('recipes') }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom-3">Reset</a>
+          <!-- Search button - start query -->
+          <button type="submit" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom-3 custom-search-button">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Jinja - check if recipes available in profile -->
+  {% if recipes|length > 0 %}
+    <!-- Recipe catalog section -->
+    <section class="row custom-recipe-container">
+      {% for recipe in recipes %}
+        <!-- Recipe preview card -->
+        <div class="col s12 m4">
+          <div class="card">
+            <!-- Image preview and button to recipe -->
+            <div class="card-image-custom">              
+              <!-- If recipe image in recipe available -->
+              {% if recipe.recipe_image != "" %}
+                <!-- Passing "recipe_id" here in href as link or reference -->
+                <!-- Note: where recipe_id equals recipe.(dot)_id -->
+                <a href="{{ url_for('recipe_view', recipe_id=recipe._id) }}">
+                  <!-- show recipe image where filename is equal to recipe image name -->
+                  <img src="../static/images/recipes/{{ recipe.recipe_image }}" alt="recipe-image">
+                </a>
+              {% else %}
+                <a href="{{ url_for('recipe_view', recipe_id=recipe._id) }}">
+                  <img src="{{url_for('static', filename='images/recipes/recipe-placeholder.jpg')}}" alt="image-placeholder">
+                </a>
+              {% endif %}
+            </div>
+            <!-- Title and subtitle -->
+            <div class="card-content">
+              <p class="card-subtitle">{{ recipe.subtitle }}</p>
+              <p class="card-title-custom">{{ recipe.title }}</p>
+            </div>
+            <!-- Social stats -->
+            <div class="card-action">
+              <span class="card-stats-time">
+                <i class="prefix material-icons tiny">timer</i>
+                {{ recipe.cooktime }} min.
+              </span>
+              <div class="card-stats-social">
+                <a href="#">Comments</a><span class="card-stats">{{ recipe.comments|length }}</span>
+                <a href="#">Likes</a><span class="card-stats">{{ recipe.likes|length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    <!-- Recipe catalog section END -->
+    </section>
+  <!-- Jinja - if no recipes available -->
+  {% else %}
+    <h5>Start sharing your recipes and join the conversation.</h5>
+  {% endif %}
+<!-- Jinja - inject content END -->
 {% endblock %}

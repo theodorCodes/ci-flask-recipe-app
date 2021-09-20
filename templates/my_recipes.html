@@ -3,7 +3,30 @@
 <!-- Jinja content block  -->
 {% block content %}
   <!-- Page content title -->
+  <!--
   <h3 class="center-align">My Recipes</h3>
+  -->
+
+  <!-- search form -->
+  <section class="search-bar">  
+    <form action="{{ url_for('search') }}" method="post" class="col s12">
+      <div class="row valign-wrapper center-align">
+        <div class="input-field col s12 m8">
+          <!-- Search index required -->
+          <input type="text" name="query" id="query" minlength="3" class="validate" required>
+          <label for="query">Search recipes, meals, cuisines, ingredients & more</label>
+        </div>
+        <div class="col s12 m4">
+          <!-- Reset button - reload page -->
+          <a href="{{ url_for('recipes') }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom-3">Reset</a>
+          <!-- Search button - start query -->
+          <button type="submit" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom-3 custom-search-button">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
 
   <!-- Edit profile button -->
   <div class="row">
@@ -109,7 +132,7 @@
             <div class="card-action">
               <span class="card-stats-time">
                 <i class="prefix material-icons tiny">timer</i>
-                {{ recipe.cooktime }}
+                {{ recipe.cooktime }} min.
               </span>
               <div class="card-stats-social">
                 <a href="#">Comments</a><span class="card-stats">{{ recipe.comments|length }}</span>

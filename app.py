@@ -40,9 +40,18 @@ mongo = PyMongo(app)
 @app.route("/recipes")
 def recipes():
     # Save queried data in variable 'recipes'
-    recipes = mongo.db.recipes.find()
+    recipes = list(mongo.db.recipes.find())
     # Render template 'recipes.html',
     # and make 'recipes' data available for template
+    return render_template("recipes.html", recipes=recipes)
+
+
+# -----------------------------------------------------------------------------
+# Search recipes - Create search index required
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    recipes = list(mongo.db.recipes.find({"$text": {"$search": query}}))
     return render_template("recipes.html", recipes=recipes)
 
 
@@ -79,12 +88,65 @@ def diets():
 @app.route("/recipe_view/<recipe_id>")
 def recipe_view(recipe_id):
 
-    profile = mongo.db.profiles.find_one(
-        {"user_id": session["user"]})
+    # Get profile from recipe
 
+    # profile = mongo.db.profiles.find_one(
+    #     {"user_id": session["user"]})
+
+    # Query recipe by id
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
 
-    return render_template("recipe_view.html", profile=profile, recipe=recipe)
+    # Get profile from recipe
+    profile = mongo.db.profiles.find_one({"user_id": recipe["author"]})
+
+    print(profile["avatar"])
+    # Query author profile information by id
+    author = recipe["author"]
+    print(author)
+    print(type(author))
+    # author = mongo.db.profiles.find_one(
+    #     {"_id": ObjectId(recipe["author"])})
+    # author_profile = recipe["author"]
+    print(recipe["author"])
+
+    return render_template("recipe_view.html", recipe=recipe, profile=profile)
+
+
+# -----------------------------------------------------------------------------
+# Recipe delete
+@app.route("/delete_recipe/<recipe_id>")
+def delete_recipe(recipe_id):
+    # Get recipe image name
+    filename = mongo.db.recipes.find_one(
+        {"_id": ObjectId(recipe_id)})["recipe_image"]
+    # Test: print(filename)
+
+    # Delete image from folder
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER_RECIPE'], filename))
+
+    # Remove recipe from profile with $pull
+    delete_recipe = {"$pull": {
+        "recipes": recipe_id
+    }}
+    # and UPDATE users profile with recipe ObjectID
+    profile = mongo.db.profiles.update_one(
+        {"user_id": session["user"]}, delete_recipe)
+
+    # Remove recipe from database
+    mongo.db.recipes.remove({"_id": ObjectId(recipe_id)})
+    flash("Your recipe has been deleted")
+
+    # Then prepare data for my_recipe.html view
+    # Query profile data where user_id is equal to session cookie stored
+    profile = mongo.db.profiles.find_one(
+        {"user_id": session["user"]})
+    # Query profiles recipe data where author is equal session cookie stored
+    # store as list to loop through in my_recipes.html
+    recipes = list(mongo.db.recipes.find({"author": session["user"]}))
+    # if session cookie truthy,
+    # then render my_recipes.html with profile information
+    if session["user"]:
+        return render_template("my_recipes.html", profile=profile, recipes=recipes)
 
 
 # -----------------------------------------------------------------------------
@@ -199,7 +261,7 @@ def recipe_add():
             "recipe_story": request.form.get("recipe_story"),
             "likes": [],
             "comments": [],
-            "author": session["user"]
+            "author": session["user"]  # FIX THIS TO PROFILE
         }
         # INSERT and retrieve inserted recipe ObjectID at the same time
         recipe_object = mongo.db.recipes.insert_one(recipe)
@@ -231,6 +293,7 @@ def recipe_add():
                 # Load available recipes
                 recipes = list(mongo.db.recipes.find(
                     {"author": session["user"]}))
+
                 # if session cookie truthy,
                 # then render my_recipes.html with profile information
                 if session["user"]:
@@ -275,7 +338,7 @@ def recipe_add():
             {"user_id": session["user"]}, recipe_added)
 
         # Flash message to user
-        flash("Recipe Added")
+        flash("Recipe Saved")
 
         # Load profile
         profile = mongo.db.profiles.find_one(
