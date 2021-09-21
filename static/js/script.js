@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     // Materialize/jQuery - Collapsible mobile menu
     $(".sidenav").sidenav({edge: "right"});
