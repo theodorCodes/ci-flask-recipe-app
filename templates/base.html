@@ -21,6 +21,7 @@
   {% endblock %}
   <title>Daily Delights</title>
 </head>
+
 <body>
   <!-- Navigation -->
   <header>
@@ -59,6 +60,7 @@
         </ul>
       </div>
     </nav>
+
     <!-- Mobile navbar -->
     <ul class="sidenav" id="nav-mobile">
       <li><h4 class="center-align sidenav-logo">Daily Delights</h4></li>
@@ -78,6 +80,7 @@
       {% endif %}
     </ul>
   </header>
+
   <!-- Flash message section -->
   <section>
     <!-- Jinja flash messages -->
@@ -95,6 +98,7 @@
       {% endif %}
     {% endwith %}
   </section>
+
   <!-- Templates extensions --> 
   <main class="container">
     {% block content %}

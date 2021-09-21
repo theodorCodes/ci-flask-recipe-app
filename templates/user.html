@@ -4,6 +4,7 @@
 {% block content %}
   <!-- Page title -->
   <h3 class="center-align light-grey">Account</h3>
+
   <!-- Edit button -->
   <div class="row">
     <div class="col s12 custom-button-right">
@@ -11,6 +12,7 @@
       <a href="{{ url_for('user_edit', user_id=session["user"]) }}" class="waves-effect waves-light btn-small #fafafa grey lighten-5 black-text button-style-custom">Edit</a>
     </div>
   </div>
+
   <!-- Account overiew - Materialize card -->
   <div class="card grey lighten-5">
     <ul class="collection">

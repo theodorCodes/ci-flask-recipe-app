@@ -155,10 +155,10 @@ HOMEPAGE VIEW */
 }
 
 
-
 /* 
 ----------------------------------------------------------------------- 
 ACCOUNT VIEW */
+
 
 /* Account edit button */
 .custom-button-right {
@@ -336,7 +336,6 @@ RECIPE VIEW */
   color: #9e9e9e;
 }
 
-
 /* Recipe view - main containers */
 .recipe-flex-container {
   display: flex;
@@ -374,7 +373,6 @@ RECIPE VIEW */
 }
 
 /* Recipe image block */
-
 .flex-A img { 
   object-fit: cover;
   width: 100%;
@@ -505,7 +503,6 @@ RECIPE VIEW */
 .card.horizontal {
   width: 99.5%;
 }
-
 
 /* Delete button */
 .recipe-button-add {
