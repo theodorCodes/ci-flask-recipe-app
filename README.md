@@ -116,7 +116,7 @@ recipe_db
    |--- users
    
 
-# Main functions planned
+Main functions planned
    |
    |--- recipes()
    |--- search()
