@@ -97,7 +97,7 @@ As sharing and communication are an essential and fun part of cooking, this site
 
 
 
-### Database schema
+### Database layout
 
 ```bash
 # Database schema
@@ -135,6 +135,112 @@ Main functions planned
    |--- logout()
 
 ```
+
+
+
+### Database schema for categories
+
+```bash
+# Document in cuisine collection
+{
+  _id: ObjectId("6124d04f2d391fa353524b7e"),
+  cuisine: "italian"
+}
+
+# Document in diets collection
+{
+  _id: ObjectId("6124d04f2d391fa353524b7e"),
+  diet: "gluten-free"
+}
+
+# Document in ingredients collection
+{
+  _id: ObjectId("6124d04f2d391fa353524b7e"),
+  ingredient: "legume"
+}
+
+# Document in meals collection
+{
+  _id: ObjectId("6124d04f2d391fa353524b7e"),
+  meal: "dessert"
+}
+
+```
+
+
+
+### Database schema for recipes
+
+```bash
+# Document in recipes collection
+{
+  _id: ObjectId("123"),
+  title:"",
+  subtitle: "",
+  cuisine: "",
+  diet: "",
+  meal: "",
+  preptime: "",
+  cooktime: "",
+  yield: "",
+  ingredients: "",
+  utensils: "",
+  instructions: "",
+  recipe_image: "",
+  recipe_story: "",
+  likes: [
+     ObjectId("1"),
+     ObjectId("2"),
+  ],
+  comments: [
+     ObjectId("1"),
+     ObjectId("2"),
+  ],
+  author: ""
+}
+
+```
+
+
+
+### Database schema for profiles
+
+```bash
+# Document in profiles
+{
+  _id: ObjectId("123"),
+  avatar: "",
+  username: "",
+  website: "",
+  bio: "",
+  user_id: "",
+  recipes: [
+     ObjectId("1"),
+     ObjectId("2"),
+  ],
+  followers: [
+     ObjectId("1"),
+     ObjectId("2"),
+  ]
+} 
+```
+
+
+
+### Database schema for users
+
+```bash
+# Document in users
+{
+  _id: ObjectId("123"),
+  username: "",
+  email: "",
+  password: ""
+}
+
+```
+
+
 
 [back to top](#table-of-contents)
 
