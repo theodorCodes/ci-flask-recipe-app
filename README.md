@@ -1,6 +1,6 @@
 *A full-stack site that allows users to manage a common dataset of recipes, covering the most common database queries such as create, read, update and delete functions.*
 
-**Preview Image of Application Here**
+![ms3-screenshot](/static/images/ms3-screenshot.png)
 
 Users can make use of this site to share their recipes with the community and can benefit from having convenient access to the data provided by all other members. This Flask, MongoDB project is part of the Code Institute's milestone project 3.
 
