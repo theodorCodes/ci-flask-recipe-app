@@ -111,6 +111,12 @@ nav ul a {
 }
 
 
+/* Custom login */
+.custom-login, .custom-register {
+  border-radius: 30px;
+}
+
+
 /* 
 -----------------------------------------------------------------------
 */
