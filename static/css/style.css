@@ -258,7 +258,7 @@ MY RECIPE VIEW */
 .card-subtitle {
   padding-bottom: 12px;
   font-family: 'Open Sans', sans-serif;
-  weights: 700;
+  font-weight: 700;
   text-transform: uppercase;
 }
 

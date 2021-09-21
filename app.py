@@ -200,7 +200,8 @@ def recipe_edit(recipe_id):
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
 
         # Render template with profile and recipe data
-        return render_template("recipe_view.html", profile=profile, recipe=recipe)
+        return render_template(
+            "recipe_view.html", profile=profile, recipe=recipe)
 
     # Default template launche with recipe data
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})

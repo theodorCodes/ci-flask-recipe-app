@@ -6,4 +6,3 @@ $(document).ready(function () {
     // Select - in recipe edit
     $('select').formSelect();
 });
-
