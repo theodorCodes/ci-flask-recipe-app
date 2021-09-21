@@ -29,7 +29,6 @@ You can visit the page and play the game right [here!](https://ci-flask-recipe-a
 -   [Testing](#testing)
     -   [HTML on W3C Validator](#html-on-w3c-validator)
     -   [CSS on W3C Jigsaw Validator](#css-on-w3c-jigsaw-validator)
-    -   [JavaScript and Chrome](#javascript-and-chrome)
     -   [JSHint and JavaScript](#jshint-and-javascript)
     -   [Issues and Bug fixes](#issues-and-bug-fixes)
     -   [Performance Test with Lighthouse](#performance-test-with-lighthouse)
@@ -209,9 +208,11 @@ This project is written in **Python**, using the Flask micro framework with **Ji
 
 ### Python Syntax Checker PEP8
 
-Info:   https://www.pythonchecker.com/
+This test has been conducted with the [Python Syntax Checker PEP8](https://www.pythonchecker.com/).
 
 Result: 100%
+
+[back to top](#table-of-contents)
 
 
 
@@ -219,9 +220,7 @@ Result: 100%
 
 ### HTML on W3C Validator
 
-The **HTML** code has been validated by direct input in the [W3C validator](https://validator.w3.org/) and resulted in the following warning:
-
-Unfortunately this did not work out that well as the code written is a fusion of HTML and Jinja language.
+The **HTML** code has not been validated by the W3C validator and it unfortunately is not possible or I have not found the right validator. Proper checking might be problematic as the code written is a fusion of HTML and the Jinja language.
 
 [back to top](#table-of-contents)
 
@@ -463,32 +462,43 @@ The [Code Institute](https://codeinstitute.net/) initiated this project to teach
 A huge thank you to the Stack Overflow community in general, where I found a lot of answers to questions I had while working on this project. I had a lot of questions while going through this project and have listed the links below as well as the questions I had during my journey.
 
 How to update hashed password:
+
 https://medium.com/codex/simple-registration-login-system-with-flask-mongodb-and-bootstrap-8872b16ef915
 
 How to get ObjectId right after insert_one() in MongoDB:
+
 https://stackoverflow.com/questions/8783753/how-to-get-the-object-id-in-pymongo-after-an-insert
+
 https://www.w3schools.com/python/python_mongodb_insert.asp
+
 https://www.w3schools.com/python/showpython.asp?filename=demo_mongodb_insert_id
 
 How to create user avatar:
+
 https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars
 
 How to upload images with Flask:
+
 https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
 
 How to save image names without extension
+
 https://www.pythonpool.com/python-get-filename-without-extension/
 
 How to use Jinja to create a dynamic path to store images in file system:
+
 https://stackoverflow.com/questions/19511175/variable-in-flask-static-files-routing-url-forstatic-filename
 
 How to have column order in mobile view:
+
 https://stackoverflow.com/questions/32829567/change-div-order-with-css-depending-on-device-width/32829829
 
 How to create a masonry with flex box:
+
 https://tobiasahlin.com/blog/masonry-with-css/
 
 How to delete images from server with flask:
+
 https://stackoverflow.com/questions/26647248/how-to-delete-files-from-the-server-with-flask
 
 How to delete a specific value from a list in MongoDB:
