@@ -154,33 +154,19 @@ The navigation throughout this application is designed to be intuitive. To keep 
 
 The application layout is fairly simple and consist of the navigation bar and the recipe view with preview cards and search function bar while the recipe detail page has a layout of structured cards with quick info about the meal, cuisine, and diet, as well as preparation time and cooking time, as well as yield, to inform the visitor about some facts about the dish presented.
 
-Homepage / recipe overview
-
-**Your image here**
 
 
+**Homepage and User Profile Page**
 
-Recipe view
-
-**Your image here**
+![ms3-wireframe-1](ms3-wireframe-1.png)
 
 
 
-User profile page 
+**Recipe Detail Page and Recipe Edit Page**
 
-**Your image here**
-
-
-
-Add recipe page
-
-**Your image here**
+![ms3-wireframe-2](ms3-wireframe-2.png)
 
 
-
-Edit profile page
-
-**Your image here**
 
 
 
