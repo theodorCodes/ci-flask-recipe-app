@@ -4,7 +4,7 @@
 
 Users can make use of this site to share their recipes with the community and can benefit from having convenient access to the data provided by all other members. This Flask, MongoDB project is part of the Code Institute's milestone project 3.
 
-You can visit the page and play the game right [here!](https://ci-flask-recipe-app.herokuapp.com) 
+You can visit the page right [here!](https://ci-flask-recipe-app.herokuapp.com) 
 
 
 
