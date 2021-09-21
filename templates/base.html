@@ -34,12 +34,6 @@
         <!-- Desktop menu center -->
         <ul class="custom-menu-center hide-on-med-and-down">
           <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
-          <!--
-          <li><a href="{{ url_for('meals') }}">Meals</a></li>
-          <li><a href="{{ url_for('cuisines') }}">Cuisines</a></li>
-          <li><a href="{{ url_for('ingredients') }}">Ingredients</a></li>
-          <li><a href="{{ url_for('diets') }}">Diets</a></li>
-          -->
         </ul>
         <!-- Desctop menu right -->
         <!-- Session based menu -->
@@ -69,12 +63,6 @@
     <ul class="sidenav" id="nav-mobile">
       <li><h4 class="center-align sidenav-logo">Daily Delights</h4></li>
       <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
-      <!--
-      <li><a href="{{ url_for('meals') }}">Meals</a></li>
-      <li><a href="{{ url_for('cuisines') }}">Cuisines</a></li>
-      <li><a href="{{ url_for('ingredients') }}">Ingredients</a></li>
-      <li><a href="{{ url_for('diets') }}">Diets</a></li>
-      -->
       <li class="divider"></li>
       {% if session.user %}
         <!-- URL link that is equal to username stored in session cookie -->

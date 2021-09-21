@@ -2,11 +2,8 @@
 {% extends "base.html" %}
 <!-- Jinja - inject content into base.html -->
 {% block content %}
-  <!--
-  <h3 class="center-align">Recipes Overview</h3>
-  -->
 
-  <!-- search form -->
+  <!-- Search form -->
   <section class="search-bar">  
     <form action="{{ url_for('search') }}" method="post" class="col s12">
       <div class="row valign-wrapper center-align">
