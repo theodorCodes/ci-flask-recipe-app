@@ -158,13 +158,13 @@ The application layout is fairly simple and consist of the navigation bar and th
 
 **Homepage and User Profile Page**
 
-![ms3-wireframe-1](/ms3-wireframe-1.png)
+![ms3-wireframe-1](/images/ms3-wireframe-1.png)
 
 
 
 **Recipe Detail Page and Recipe Edit Page**
 
-![ms3-wireframe-2](/ms3-wireframe-2.png)
+![ms3-wireframe-2](/images/ms3-wireframe-2.png)
 
 
 
